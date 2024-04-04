@@ -36,5 +36,6 @@ void UnitTestHashMap(HashFuncType hashFunc)
         assert(!HashTableGetValue(hashTable, word));
     }
 
+    fclose(inStream);
     HashTableDtor(hashTable);
 }
