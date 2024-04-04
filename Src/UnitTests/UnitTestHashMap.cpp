@@ -1,10 +1,10 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "TestCorrectness.h"
+#include "UnitTestHashMap.h"
 #include "HashTable/HashTable.h"
 
-void TestCorrectness(HashFuncType hashFunc)
+void UnitTestHashMap(HashFuncType hashFunc)
 {   
     FILE* inStream = fopen("wordsAll.txt", "r");
     assert(inStream);

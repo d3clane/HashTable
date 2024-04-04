@@ -24,9 +24,9 @@ DOXYFILE = Others/Doxyfile
 MAIN_CPP			= main.cpp
 MAIN_OBJ			= $(MAIN_CPP:%.cpp=$(OBJECTDIR)/%.o)
 
-TESTING_DIR			= Testing
-TESTING_CPP 		= TestCorrectness.cpp
-TESTING_OBJ 	 	= $(TESTING_CPP:%.cpp=$(OBJECTDIR)/%.o)
+UNIT_TESTINGDIR			= UnitTests
+UNIT_TESTINGCPP 		= UnitTestHashMap.cpp
+UNIT_TESTINGOBJ 	 	= $(UNIT_TESTINGCPP:%.cpp=$(OBJECTDIR)/%.o)
 
 HASH_TABLE_DIR     	= HashTable
 HASH_TABLE_CPP	  	= HashTable.cpp HashTableElem.cpp
@@ -49,7 +49,7 @@ COMMON_OBJ     		= $(COMMON_CPP:%.cpp=$(OBJECTDIR)/%.o)
 all: $(TARGET)
 
 $(TARGET): $(HASH_TABLE_OBJ) $(HASHES_OBJ) $(COMMON_OBJ) $(HASH_TABLE_LIST_OBJ) \
-					     $(MAIN_OBJ) $(TESTING_OBJ)
+					     $(MAIN_OBJ) $(UNIT_TESTINGOBJ)
 	$(CXX) $^ -o $(TARGET) $(CXXFLAGS)
 
 $(OBJECTDIR)/%.o : $(HASH_TABLE_DIR)/%.cpp
@@ -64,7 +64,7 @@ $(OBJECTDIR)/%.o : $(COMMON_DIR)/%.cpp
 $(OBJECTDIR)/%.o : $(HASH_TABLE_LIST_DIR)/%.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 
 
-$(OBJECTDIR)/%.o : $(TESTING_DIR)/%.cpp
+$(OBJECTDIR)/%.o : $(UNIT_TESTINGDIR)/%.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 
 
 
