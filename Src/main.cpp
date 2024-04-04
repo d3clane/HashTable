@@ -31,9 +31,14 @@ int main(const int argc, const char* argv[])
                                 "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/FirstCharASCIIHash.txt");
 
+
     MeasureHashTableListsSizes(hashTableCapacity, SumCharsASCIIHash, 
                                 "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/SumCharsASCIIHash.txt");
+
+    MeasureHashTableListsSizes(389, SumCharsASCIIHash, 
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "../TestResults/ListSizesTest/SumCharsASCIIHashSmallCap.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, StringLengthHash, 
                                 "../TestsInput/ListSizesTest/wordsAll.txt",
