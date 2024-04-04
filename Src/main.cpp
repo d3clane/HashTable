@@ -21,37 +21,37 @@ int main(const int argc, const char* argv[])
     UnitTestHashMap(CRC32Hash);
     */
 
-   static const size_t hashTableCapacity = 512;
+   static const size_t hashTableCapacity = 49157;
 
     MeasureHashTableListsSizes(hashTableCapacity, ConstantHash, 
-                                "../TestsInput/ListSizesTest/wordsCommon.txt",
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/ConstantHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, FirstCharASCIIHash, 
-                                "../TestsInput/ListSizesTest/wordsCommon.txt",
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/FirstCharASCIIHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, SumCharsASCIIHash, 
-                                "../TestsInput/ListSizesTest/wordsCommon.txt",
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/SumCharsASCIIHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, StringLengthHash, 
-                                "../TestsInput/ListSizesTest/wordsCommon.txt",
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/StringLengthHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, RolHash, 
-                                "../TestsInput/ListSizesTest/wordsCommon.txt",
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/RolHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, RorHash, 
-                                "../TestsInput/ListSizesTest/wordsCommon.txt",
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/RorHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, MurMurHash, 
-                                "../TestsInput/ListSizesTest/wordsCommon.txt",
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/MurMurHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, CRC32Hash, 
-                                "../TestsInput/ListSizesTest/wordsCommon.txt",
+                                "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/CRC32Hash.txt");
 }
