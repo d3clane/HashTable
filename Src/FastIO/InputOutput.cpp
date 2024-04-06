@@ -207,7 +207,7 @@ void WipeFile(const char* const fileName)
 
 //------------------------------------------------------------------------------------------------
 
-void TextTypeDestructor(TextType* const text)
+void TextTypeDtor(TextType* const text)
 {
     if (text == nullptr)
         return;

@@ -1,9 +1,13 @@
 #include <assert.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <math.h>
 
 #include "TestPerformance.h"
 #include "HashTable/HashTable.h"
+#include "FastIO/InputOutput.h"
+
+extern "C" uint64_t GetTimeStampCounter();
 
 void MeasureHashTableListsSizes(size_t hashTableCapacity, HashFuncType hashFunc, 
                                 const char* inStreamFileName, const char* outStreamFileName)
@@ -52,17 +56,40 @@ void MeasureHashTableListsSizes(size_t hashTableCapacity, HashFuncType hashFunc,
     HashTableDtor(hashTable);
 }
 
-void HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
+uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
                         const char* inStreamFileName)
 {
     assert(inStreamFileName);
 
-    HashTableType* table = HashTableCtor(hashTableCapacity, hashFunc);
+    FILE* inStream = fopen(inStreamFileName, "r");
+    assert(inStream);
+
+    HashTableType* hashTable = HashTableCtor(hashTableCapacity, hashFunc);
+
+    char word[256];
+    size_t numberOfWords = 0;
+    while (true)
+    {
+        int scanfErr = fscanf(inStream, "%s", word);
+
+        if (scanfErr == EOF)
+            break;
+
+        HashTableInsert(hashTable, word, true);
+        
+        ++numberOfWords;
+    }
+
+    uint64_t timeSpent = GetTimeStampCounter();
 
     for (size_t testId = 0; testId < 10; ++testId)
     {
-        
+        HashTableGetValue()
     }
 
-    HashTableDtor(table);
+    timeSpent = GetTimeStampCounter() - timeSpent;
+
+    HashTableDtor(hashTable);
+
+    return timeSpent;
 }

@@ -26,7 +26,7 @@ struct TextType
 ///
 /// @details Free all dynamic arrays
 /// @param [out]text structure to destruct
-void TextTypeDestructor(TextType* text);
+void TextTypeDtor(TextType* text);
 
 //------------------------------------------------------------------------------------------------
 
