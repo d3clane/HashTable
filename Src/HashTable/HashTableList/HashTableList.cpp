@@ -471,19 +471,15 @@ HtListErrors HtListFindElemByKey(HtListType* list, const char* key, size_t* elem
 
     do
     {
-        HashTableElemType listVal = {};
-        HtListGetElem(list, pos, &listVal);
+        const char* listKey = list->data[pos].value.key;
         
-        if (listVal.key && strcmp(listVal.key, key) == 0)
+        if (listKey && strcmp(listKey, key) == 0)
         {
             *elemPos = pos;
 
-            HashTableElemDtor(&listVal);
             return HtListErrors::NO_ERR;
         }
-
-        HashTableElemDtor(&listVal);
-
+        
         HtListGetNextElem(list, pos, &pos);
     } while (pos != list->end);
     

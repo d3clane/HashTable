@@ -87,21 +87,19 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     TextTypeCtor(&text, inStreamFileName);
     Replace(text.text, '\n', '\0');
 
-    bool res = false;
     uint64_t timeSpent = GetTimeStampCounter();
 
-    static const size_t numberOfTestsRun = 100;
+    static const size_t numberOfTestsRun = 1;
     for (size_t testId = 0; testId < numberOfTestsRun; ++testId)
     {
         for (size_t wordId = 0; wordId < text.linesCnt; ++wordId)
         {
-            res ^= HashTableGetValue(hashTable, text.lines[wordId].line);
+            HashTableGetValue(hashTable, text.lines[wordId].line);
         }
     }
 
     timeSpent = GetTimeStampCounter() - timeSpent;
 
-    printf("bool res - %d\n", res);
     TextTypeDtor(&text);
     HashTableDtor(hashTable);
 
