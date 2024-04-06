@@ -99,13 +99,13 @@ HtListErrors HtListDtor(HtListType* list)
 {
     assert(list);
 
+    for (size_t i = 0; i < list->capacity; ++i)
+        HtListElemDtor(list->data + i);
+
+    free(list->data);
+
     list->end = list->freeBlockHead = 0;
     list->capacity = list->size = 0;
-
-    for (size_t i = 0; i < list->size; ++i)
-        HtListElemDtor(list->data + i);
-        
-    free(list->data);
 
     list->data = nullptr;
     return HtListErrors::NO_ERR;
@@ -434,8 +434,8 @@ HtListErrors HtListGetElem(HtListType* list, size_t pos, HashTableElemType* elem
 
     HT_LIST_CHECK(list);
 
-    *elemValue = list->data[pos].value;
-
+    *elemValue = HashTableElemCpy(list->data[pos].value);
+    
     return HtListErrors::NO_ERR;
 }
 
@@ -478,8 +478,11 @@ HtListErrors HtListFindElemByKey(HtListType* list, const char* key, size_t* elem
         {
             *elemPos = pos;
 
+            HashTableElemDtor(&listVal);
             return HtListErrors::NO_ERR;
         }
+
+        HashTableElemDtor(&listVal);
 
         HtListGetNextElem(list, pos, &pos);
     } while (pos != list->end);
@@ -500,16 +503,19 @@ static inline void HtListDataInit(HtListElemType* list,
         HtListElemInit(&list[i], POISON, i - 1, i + 1);
 
     if (rightBorder == listCapacity)
+    {
+        HtListElemDtor(list + listCapacity - 1);
         HtListElemInit(&list[listCapacity - 1], POISON, listCapacity - 2, 0);  
+    }
 }
 
 void HtListElemInit(HtListElemType* elem, const HashTableElemType value, 
-                                      const size_t prevPos, 
-                                      const size_t nextPos)
+                                          const size_t prevPos, 
+                                          const size_t nextPos)
 {
     assert(elem);
     
-    elem->value   = HashTableElemCpy(value);
+    elem->value   = value;
     elem->prevPos = prevPos;
     elem->nextPos = nextPos;
 }
@@ -577,6 +583,7 @@ static inline void AddFreeBlock(HtListType* list, const size_t newPos)
     if (list->freeBlockHead == 0)
     {
         list->freeBlockHead = newPos;
+        HtListElemDtor(list->data + list->freeBlockHead);
         HtListElemInit(&list->data[list->freeBlockHead], POISON, 0, 0);
 
         return;
@@ -584,6 +591,7 @@ static inline void AddFreeBlock(HtListType* list, const size_t newPos)
 
     //do not change order!
     list->data[list->freeBlockHead].prevPos = newPos;
+    HtListElemDtor(list->data + newPos);
     HtListElemInit(&list->data[newPos], POISON, 0, list->freeBlockHead);
     list->freeBlockHead = newPos;
 }
@@ -623,7 +631,6 @@ static HtListErrors HtListRebuild(HtListType* list)
     size_t listTail = HtListGetTail(list);
     for (size_t i = HtListGetHead(list); i != listTail; i = list->data[i].nextPos)
     {
-        
         HtListElemInit(&newHtList.data[posInNewHtList], list->data[i].value, 
                                                   posInNewHtList - 1, posInNewHtList + 1);
         ++posInNewHtList;

@@ -94,11 +94,18 @@ void HashTableDtor(HashTableType* table)
     assert(table);
 
     if (table->buckets)
-        HtListDtor(table->buckets);
+    {
+        for (size_t i = 0; i < table->numberOfBuckets; ++i)
+            HtListDtor(table->buckets + i);
 
+        free(table->buckets);
+    }
+    
     table->buckets         = nullptr;
     table->numberOfBuckets = 0;
     table->hashFunc        = nullptr;
+
+    free(table);
 }
 
 void HashTableInsert(HashTableType* table, const char* key, const bool val, 

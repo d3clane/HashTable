@@ -10,7 +10,6 @@ int main(const int argc, const char* argv[])
 {
     LogOpen(argv[0]);
     
-    /*
     UnitTestHashMap(ConstantHash);
     UnitTestHashMap(FirstCharASCIIHash);
     UnitTestHashMap(SumCharsASCIIHash);
@@ -19,10 +18,10 @@ int main(const int argc, const char* argv[])
     UnitTestHashMap(RorHash);
     UnitTestHashMap(MurMurHash);
     UnitTestHashMap(CRC32Hash);
-    */
-
+    
    static const size_t hashTableCapacity = 49157;
 
+    /*
     MeasureHashTableListsSizes(hashTableCapacity, ConstantHash, 
                                 "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/ConstantHash.txt");
@@ -59,4 +58,6 @@ int main(const int argc, const char* argv[])
     MeasureHashTableListsSizes(hashTableCapacity, CRC32Hash, 
                                 "../TestsInput/ListSizesTest/wordsAll.txt",
                                 "../TestResults/ListSizesTest/CRC32Hash.txt");
+
+    */
 }

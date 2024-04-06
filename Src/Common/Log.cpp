@@ -159,9 +159,13 @@ static inline size_t Min(size_t a, size_t b)
 
 static int TryOpenFile(const char* name)
 {
-    //TODO: поменять на статический массив, а то calloc в логах странно
-    char* newString = strdup(name);
-    char* fileName  = strcat(newString, ".log.html");
+    const char* fileSuffix = ".log.html";
+
+    const size_t  fileNameSize  = 256;
+    char fileName[fileNameSize] = "";
+    
+    assert(strlen(name) + sizeof(fileSuffix) <= fileNameSize);
+    snprintf(fileName, fileNameSize, "%s%s", name, fileSuffix);
 
     LOG_FILE = open(fileName, O_WRONLY | O_APPEND);
 
@@ -171,7 +175,5 @@ static int TryOpenFile(const char* name)
         LOG_FILE = open(fileName, O_WRONLY | O_APPEND);
     }
     
-    free(newString);
-
     return LOG_FILE;
 }

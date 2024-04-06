@@ -38,7 +38,7 @@ HashTableElemType HashTableElemInit(const char* key, bool val)
 {
     HashTableElemType elem = HashTableElemCtor();
 
-    elem.key = strdup(key);
+    elem.key = key ? strdup(key) : nullptr;
     elem.val = val;
 
     return elem;
