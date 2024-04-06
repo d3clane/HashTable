@@ -1,5 +1,6 @@
 CXX = g++-11
-CXXFLAGS = -D NDEBUG -g -ggdb3 -std=c++17 -O3 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations \
+ASM = nasm
+CXXFLAGS = -D _DEBUG -g -ggdb3 -std=c++17 -O3 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations \
 		   -Wc++14-compat -Wmissing-declarations -Wcast-align -Wcast-qual -Wchar-subscripts \
 		   -Wconditionally-supported -Wconversion -Wctor-dtor-privacy -Wempty-body -Wfloat-equal \
 		   -Wformat-nonliteral -Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op \
@@ -13,7 +14,6 @@ CXXFLAGS = -D NDEBUG -g -ggdb3 -std=c++17 -O3 -Wall -Wextra -Weffc++ -Waggressiv
 		   -flto-odr-type-merging -fno-omit-frame-pointer -Wlarger-than=8192 -Wstack-usage=8192 -pie \
 		   -fPIE -Werror=vla #-fsanitize=address,alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr \
 		   
-
 HOME = $(shell pwd)
 CXXFLAGS += -I $(HOME)
 
@@ -29,9 +29,11 @@ UNIT_TEST_DIR	    = UnitTests
 UNIT_TEST_CPP 		= UnitTestHashMap.cpp
 UNIT_TEST_OBJ 	 	= $(UNIT_TEST_CPP:%.cpp=$(OBJECTDIR)/%.o)
 
-TEST_PERFORMANCE_DIR = TestPerformance
-TEST_PERFORMANCE_CPP = TestPerformance.cpp
-TEST_PERFORMANCE_OBJ = $(TEST_PERFORMANCE_CPP:%.cpp=$(OBJECTDIR)/%.o)
+TEST_PERFORMANCE_DIR  = TestPerformance
+TEST_PERFORMANCE_CPP  = TestPerformance.cpp
+TEST_PERFORMANCE_ASM  = GetTimeStampCounter.s
+TEST_PERFORMANCE_OBJ  = $(TEST_PERFORMANCE_CPP:%.cpp=$(OBJECTDIR)/%.o)
+TEST_PERFORMANCE_OBJ +=	$(TEST_PERFORMANCE_ASM:%.s=$(OBJECTDIR)/%.o)
 
 HASH_TABLE_DIR     	= HashTable
 HASH_TABLE_CPP	  	= HashTable.cpp HashTableElem.cpp
@@ -49,18 +51,25 @@ COMMON_DIR     		= Common
 COMMON_CPP	 		= Log.cpp
 COMMON_OBJ     		= $(COMMON_CPP:%.cpp=$(OBJECTDIR)/%.o)
 
+FAST_IO_DIR			= FastIO
+FAST_IO_CPP			= InputOutput.cpp StringFuncs.cpp
+FAST_IO_OBJ			= $(FAST_IO_CPP:%.cpp=$(OBJECTDIR)/%.o)
+
 .PHONY: all docs clean install
 	
 all: $(TARGET)
 
 $(TARGET): $(HASH_TABLE_OBJ) $(HASHES_OBJ) $(COMMON_OBJ) $(HASH_TABLE_LIST_OBJ) \
-					     $(MAIN_OBJ) $(UNIT_TEST_OBJ) $(TEST_PERFORMANCE_OBJ)
+					     $(MAIN_OBJ) $(UNIT_TEST_OBJ) $(TEST_PERFORMANCE_OBJ) $(FAST_IO_OBJ)
 	$(CXX) $^ -o $(TARGET) $(CXXFLAGS)
 
 $(OBJECTDIR)/%.o : $(HASH_TABLE_DIR)/%.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 
 
 $(OBJECTDIR)/%.o : $(HASHES_DIR)/%.cpp
+	$(CXX) -c $< -o $@ $(CXXFLAGS) 
+
+$(OBJECTDIR)/%.o : $(FAST_IO_DIR)/%.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 
 
 $(OBJECTDIR)/%.o : $(COMMON_DIR)/%.cpp
@@ -74,6 +83,9 @@ $(OBJECTDIR)/%.o : $(UNIT_TEST_DIR)/%.cpp
 
 $(OBJECTDIR)/%.o : $(TEST_PERFORMANCE_DIR)/%.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 
+
+$(OBJECTDIR)/%.o : $(TEST_PERFORMANCE_DIR)/%.s
+	$(ASM) -f elf64 $< -o $@
 
 $(OBJECTDIR)/%.o : %.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 

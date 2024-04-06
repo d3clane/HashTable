@@ -1,6 +1,8 @@
 #ifndef INPUT_OUTPUT_H
 #define INPUT_OUTPUT_H
 
+#include <stdio.h>
+
 /// @file 
 /// @brief Contains functions to work with input and output for text input
 

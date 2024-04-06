@@ -100,7 +100,7 @@ void HashTableDtor(HashTableType* table)
 
         free(table->buckets);
     }
-    
+
     table->buckets         = nullptr;
     table->numberOfBuckets = 0;
     table->hashFunc        = nullptr;
@@ -205,10 +205,15 @@ bool HashTableGetValue(HashTableType* table, const char* key, HashTableErrors* e
     {
         if (error) *error = HashTableErrors::HT_LIST_ERR;
 
+        HashTableElemDtor(&foundValue);
         return false;
     } 
 
-    return foundValue.val;
+    bool retValue = foundValue.val;
+
+    HashTableElemDtor(&foundValue);
+
+    return retValue;
 }
 
 static inline size_t HashTableGetBucketPos(HashTableType* table, const char* key)

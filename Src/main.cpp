@@ -10,8 +10,9 @@ int main(const int argc, const char* argv[])
 {
     LogOpen(argv[0]);
     
-    static const char* testsInputFileName = "testsInputFileName";
-    
+    static const char* testsInputFileName = "../TestsInput/ListSizesTest/wordsAll.txt";
+
+    /*
     UnitTestHashMap(ConstantHash,       testsInputFileName);
     UnitTestHashMap(FirstCharASCIIHash, testsInputFileName);
     UnitTestHashMap(SumCharsASCIIHash,  testsInputFileName);
@@ -19,9 +20,11 @@ int main(const int argc, const char* argv[])
     UnitTestHashMap(RolHash,            testsInputFileName);
     UnitTestHashMap(RorHash,            testsInputFileName);
     UnitTestHashMap(MurMurHash,         testsInputFileName);
+    */
     UnitTestHashMap(CRC32Hash,          testsInputFileName);
     
-   static const size_t hashTableCapacity = 49157;
+
+    static const size_t hashTableCapacity = 49157;
 
     /*
     MeasureHashTableListsSizes(hashTableCapacity, ConstantHash, 
@@ -62,4 +65,7 @@ int main(const int argc, const char* argv[])
                                 "../TestResults/ListSizesTest/CRC32Hash.txt");
 
     */
+
+    uint64_t time = HashTableBenchmark(hashTableCapacity, CRC32Hash, testsInputFileName);
+    printf("benchmark time - %llu\n", time);
 }

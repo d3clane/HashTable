@@ -126,7 +126,6 @@ void Replace(char *str, const char find, const char replace)
 
     while (*str)
     {  
-        assert(str);
         if (*str == find) *str = replace;
 
         ++str;

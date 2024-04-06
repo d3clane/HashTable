@@ -6,6 +6,7 @@
 #include "TestPerformance.h"
 #include "HashTable/HashTable.h"
 #include "FastIO/InputOutput.h"
+#include "FastIO/StringFuncs.h"
 
 extern "C" uint64_t GetTimeStampCounter();
 
@@ -80,15 +81,28 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
         ++numberOfWords;
     }
 
+    fclose(inStream);
+
+    TextType text = {};
+    TextTypeCtor(&text, inStreamFileName);
+    Replace(text.text, '\n', '\0');
+
+    bool res = false;
     uint64_t timeSpent = GetTimeStampCounter();
 
-    for (size_t testId = 0; testId < 10; ++testId)
+    static const size_t numberOfTestsRun = 100;
+    for (size_t testId = 0; testId < numberOfTestsRun; ++testId)
     {
-        HashTableGetValue()
+        for (size_t wordId = 0; wordId < text.linesCnt; ++wordId)
+        {
+            res ^= HashTableGetValue(hashTable, text.lines[wordId].line);
+        }
     }
 
     timeSpent = GetTimeStampCounter() - timeSpent;
 
+    printf("bool res - %d\n", res);
+    TextTypeDtor(&text);
     HashTableDtor(hashTable);
 
     return timeSpent;
