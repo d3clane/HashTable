@@ -10,53 +10,55 @@ int main(const int argc, const char* argv[])
 {
     LogOpen(argv[0]);
     
-    UnitTestHashMap(ConstantHash);
-    UnitTestHashMap(FirstCharASCIIHash);
-    UnitTestHashMap(SumCharsASCIIHash);
-    UnitTestHashMap(StringLengthHash);
-    UnitTestHashMap(RolHash);
-    UnitTestHashMap(RorHash);
-    UnitTestHashMap(MurMurHash);
-    UnitTestHashMap(CRC32Hash);
+    static const char* testsInputFileName = "testsInputFileName";
+    
+    UnitTestHashMap(ConstantHash,       testsInputFileName);
+    UnitTestHashMap(FirstCharASCIIHash, testsInputFileName);
+    UnitTestHashMap(SumCharsASCIIHash,  testsInputFileName);
+    UnitTestHashMap(StringLengthHash,   testsInputFileName);
+    UnitTestHashMap(RolHash,            testsInputFileName);
+    UnitTestHashMap(RorHash,            testsInputFileName);
+    UnitTestHashMap(MurMurHash,         testsInputFileName);
+    UnitTestHashMap(CRC32Hash,          testsInputFileName);
     
    static const size_t hashTableCapacity = 49157;
 
     /*
     MeasureHashTableListsSizes(hashTableCapacity, ConstantHash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/ConstantHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, FirstCharASCIIHash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/FirstCharASCIIHash.txt");
 
 
     MeasureHashTableListsSizes(hashTableCapacity, SumCharsASCIIHash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/SumCharsASCIIHash.txt");
 
     MeasureHashTableListsSizes(389, SumCharsASCIIHash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/SumCharsASCIIHashSmallCap.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, StringLengthHash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/StringLengthHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, RolHash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/RolHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, RorHash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/RorHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, MurMurHash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/MurMurHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, CRC32Hash, 
-                                "../TestsInput/ListSizesTest/wordsAll.txt",
+                                "testsInputFileName",
                                 "../TestResults/ListSizesTest/CRC32Hash.txt");
 
     */

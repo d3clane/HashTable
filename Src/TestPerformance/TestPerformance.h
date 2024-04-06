@@ -8,4 +8,7 @@
 void MeasureHashTableListsSizes(size_t hashTableCapacity, HashFuncType hashFunc, 
                                 const char* inStreamFileName, const char* outStreamFileName);
 
+void HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
+                                const char* inStreamFileName);
+                                
 #endif

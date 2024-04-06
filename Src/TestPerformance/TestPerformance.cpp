@@ -51,3 +51,18 @@ void MeasureHashTableListsSizes(size_t hashTableCapacity, HashFuncType hashFunc,
     
     HashTableDtor(hashTable);
 }
+
+void HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
+                        const char* inStreamFileName)
+{
+    assert(inStreamFileName);
+
+    HashTableType* table = HashTableCtor(hashTableCapacity, hashFunc);
+
+    for (size_t testId = 0; testId < 10; ++testId)
+    {
+        
+    }
+
+    HashTableDtor(table);
+}

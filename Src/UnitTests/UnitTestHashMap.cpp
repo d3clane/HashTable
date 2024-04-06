@@ -4,9 +4,11 @@
 #include "UnitTestHashMap.h"
 #include "HashTable/HashTable.h"
 
-void UnitTestHashMap(HashFuncType hashFunc)
+void UnitTestHashMap(HashFuncType hashFunc, const char* testsFileName)
 {   
-    FILE* inStream = fopen("wordsAll.txt", "r");
+    assert(testsFileName);
+    
+    FILE* inStream = fopen(testsFileName, "r");
     assert(inStream);
 
     HashTableType* hashTable = HashTableCtor(1e5, hashFunc);

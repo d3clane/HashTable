@@ -3,6 +3,6 @@
 
 #include "Hashes/Hashes.h"
 
-void UnitTestHashMap(HashFuncType hashFunc);
+void UnitTestHashMap(HashFuncType hashFunc, const char* testsFileName);
 
 #endif 
