@@ -71,9 +71,8 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     
     TextType text = {};
     TextTypeCtor(&text, inStreamFileName);
-    char*  wordsAligned     = (char*)aligned_alloc(HashTableElemKeyAlignment, 
-                                                  text.linesCnt * HashTableElemKeyLen * 
-                                                  sizeof(*wordsAligned)); 
+    char*  wordsAligned     = (char*)calloc(text.linesCnt * HashTableElemKeyLen,
+                                            sizeof(*wordsAligned)); 
     size_t wordsAlignedSize = text.linesCnt;
     Replace(text.text, '\n', '\0');
 

@@ -27,7 +27,7 @@ static inline int AsmStrcmp(const char* str1, const char* str2)
 
     __asm__ inline (
         ".intel_syntax noprefix\n\t"
-        "vmovdqa ymm0, YMMWORD PTR [%1]\n\t" //read str1
+        "vmovdqu ymm0, YMMWORD PTR [%1]\n\t" //read str1
         "vptest ymm0, YMMWORD PTR[%2]\n\t"   // cmp str1 and str2
         "setc %b0\n\t"                       // set carry flag to res
         "vzeroupper\n\t"                     // explained in readme

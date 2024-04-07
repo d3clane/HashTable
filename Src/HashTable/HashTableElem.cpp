@@ -18,8 +18,7 @@ HashTableElemType HashTableElemCpy(const HashTableElemType elem)
         return elemCopy;
     }
 
-    elemCopy.key = (char*)aligned_alloc(HashTableElemKeyAlignment, 
-                                        HashTableElemKeyLen * sizeof(*elemCopy.key));
+    elemCopy.key = (char*)calloc(HashTableElemKeyLen, sizeof(*elemCopy.key));
     memcpy(elemCopy.key, elem.key, HashTableElemKeyLen * sizeof(*elemCopy.key));
     elemCopy.val = elem.val;
 
@@ -56,7 +55,7 @@ HashTableElemType HashTableElemInit(const char* key, bool val)
         return elem;
     }
 
-    elem.key = (char*)aligned_alloc(HashTableElemKeyAlignment, HashTableElemKeyLen * sizeof(*elem.key));
+    elem.key = (char*)calloc(HashTableElemKeyLen, sizeof(*elem.key));
     memcpy(elem.key, key, HashTableElemKeyLen * sizeof(*elem.key));
     elem.val = val;
 
