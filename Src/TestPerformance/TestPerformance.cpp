@@ -68,43 +68,42 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     assert(inStream);
 
     HashTableType* hashTable = HashTableCtor(hashTableCapacity, hashFunc);
-    
-    TextType text = {};
-    TextTypeCtor(&text, inStreamFileName);
-    char*  wordsAligned     = (char*)calloc(text.linesCnt * HashTableElemKeyLen, 
-                                            sizeof(*wordsAligned)); 
-    size_t wordsAlignedSize = text.linesCnt;
-    Replace(text.text, '\n', '\0');
 
-    for (size_t i = 0; i < text.linesCnt; ++i)
+    char word[256];
+    size_t numberOfWords = 0;
+    while (true)
     {
-        assert(strlen(text.lines[i].line) < HashTableElemKeyLen);
+        int scanfErr = fscanf(inStream, "%s", word);
 
-        strncpy(wordsAligned + i * HashTableElemKeyLen, text.lines[i].line, HashTableElemKeyLen);
-        HashTableInsert(hashTable, wordsAligned + i * HashTableElemKeyLen, true);
+        if (scanfErr == EOF)
+            break;
+
+        HashTableInsert(hashTable, word, true);
+        
+        ++numberOfWords;
     }
 
-    TextTypeDtor(&text);
     fclose(inStream);
+
+    TextType text = {};
+    TextTypeCtor(&text, inStreamFileName);
+    Replace(text.text, '\n', '\0');
 
     uint64_t timeSpent = GetTimeStampCounter();
 
-    static const size_t numberOfTestsRun = 100;
+    static const size_t numberOfTestsRun = 10;
     for (size_t testId = 0; testId < numberOfTestsRun; ++testId)
     {
-        for (size_t wordId = 0; wordId < wordsAlignedSize; ++wordId)
+        for (size_t wordId = 0; wordId < text.linesCnt; ++wordId)
         {
-            HashTableGetValue(hashTable, wordsAligned + wordId * HashTableElemKeyLen);
+            HashTableGetValue(hashTable, text.lines[wordId].line);
         }
     }
 
-    //assert(!HashTableGetValue(hashTable, "dedlox\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"));
     timeSpent = GetTimeStampCounter() - timeSpent;
 
     TextTypeDtor(&text);
     HashTableDtor(hashTable);
-
-    free(wordsAligned);
 
     return timeSpent;
 }
