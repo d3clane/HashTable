@@ -1,6 +1,8 @@
 #ifndef HASH_TABLE_ELEM_H
 #define HASH_TABLE_ELEM_H
 
+static const size_t HashTableElemKeyLen = 32; 
+
 struct HashTableElemType
 {
     char* key;

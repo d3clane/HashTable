@@ -21,7 +21,7 @@ int main(const int argc, const char* argv[])
     UnitTestHashMap(RorHash,            testsInputFileName);
     UnitTestHashMap(MurMurHash,         testsInputFileName);
     */
-    //UnitTestHashMap(CRC32Hash,          testsInputFileName);
+    UnitTestHashMap(CRC32Hash,          testsInputFileName);
     
 
     static const size_t hashTableCapacity = 49157;

@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "UnitTestHashMap.h"
 #include "HashTable/HashTable.h"
@@ -16,6 +17,7 @@ void UnitTestHashMap(HashFuncType hashFunc, const char* testsFileName)
     char word[256];
     while (true)
     {
+        memset(word, 0, 256);
         int scanfErr = fscanf(inStream, "%s", word);
 
         if (scanfErr == EOF)
@@ -33,6 +35,10 @@ void UnitTestHashMap(HashFuncType hashFunc, const char* testsFileName)
         if (scanfErr == EOF)
             break;
 
+        if (!HashTableGetValue(hashTable, word))
+        {
+            fprintf(stderr, "word - %s\n", word);
+        }
         assert(HashTableGetValue(hashTable, word));
         HashTableErase(hashTable, word);
         assert(!HashTableGetValue(hashTable, word));

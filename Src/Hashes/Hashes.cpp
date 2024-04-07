@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+#include <nmmintrin.h>
 
 #include "Hashes.h"
 
@@ -153,6 +154,17 @@ uint32_t CRC32Hash         (const char* inString)
     }
 
     return (uint32_t)~crc;
+}
+
+uint32_t CRC32HashIntrinsic(const char* inString)
+{
+    uint32_t crc = 0;
+    crc = _mm_crc32_u64(crc, *((uint64_t*)inString + 0));
+    crc = _mm_crc32_u64(crc, *((uint64_t*)inString + 1));
+    crc = _mm_crc32_u64(crc, *((uint64_t*)inString + 2));
+    crc = _mm_crc32_u64(crc, *((uint64_t*)inString + 3));
+
+    return crc;
 }
 
 static inline uint32_t Rol(uint32_t dWord)

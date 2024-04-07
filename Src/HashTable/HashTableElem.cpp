@@ -38,7 +38,14 @@ HashTableElemType HashTableElemInit(const char* key, bool val)
 {
     HashTableElemType elem = HashTableElemCtor();
 
-    elem.key = key ? strdup(key) : nullptr;
+    if (key == nullptr)
+    {
+        elem.val = val;
+        return elem;
+    }
+
+    elem.key = (char*)calloc(HashTableElemKeyLen, sizeof(*elem.key));
+    strcpy(elem.key, key);
     elem.val = val;
 
     return elem;

@@ -13,5 +13,6 @@ uint32_t RolHash           (const char* inString);
 uint32_t RorHash           (const char* inString);
 uint32_t MurMurHash        (const char* inString);
 uint32_t CRC32Hash         (const char* inString);
+uint32_t CRC32HashIntrinsic(const char* inString);
 
 #endif

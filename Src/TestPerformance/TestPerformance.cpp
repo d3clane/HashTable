@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <math.h>
+#include <string.h>
 
 #include "TestPerformance.h"
 #include "HashTable/HashTable.h"
+#include "HashTable/HashTableElem.h"
 #include "FastIO/InputOutput.h"
 #include "FastIO/StringFuncs.h"
 
@@ -66,35 +68,37 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     assert(inStream);
 
     HashTableType* hashTable = HashTableCtor(hashTableCapacity, hashFunc);
-
-    char word[256];
-    size_t numberOfWords = 0;
-    while (true)
-    {
-        int scanfErr = fscanf(inStream, "%s", word);
-
-        if (scanfErr == EOF)
-            break;
-
-        HashTableInsert(hashTable, word, true);
-        
-        ++numberOfWords;
-    }
-
-    fclose(inStream);
-
+    
     TextType text = {};
     TextTypeCtor(&text, inStreamFileName);
+    char** wordsAligned     = (char**)calloc(text.linesCnt, sizeof(*wordsAligned));
+    size_t wordsAlignedSize = text.linesCnt;
     Replace(text.text, '\n', '\0');
+
+    for (size_t i = 0; i < text.linesCnt; ++i)
+    {
+        assert(strlen(text.lines[i].line) < HashTableElemKeyLen);
+
+        wordsAligned[i] = (char*)calloc(HashTableElemKeyLen, sizeof(*wordsAligned[i]));
+    }
+
+    for (size_t i = 0; i < wordsAlignedSize; ++i)
+    {
+        strncpy(wordsAligned[i], text.lines[i].line, HashTableElemKeyLen);
+        HashTableInsert(hashTable, wordsAligned[i], true);
+    }
+
+    TextTypeDtor(&text);
+    fclose(inStream);
 
     uint64_t timeSpent = GetTimeStampCounter();
 
     static const size_t numberOfTestsRun = 1;
     for (size_t testId = 0; testId < numberOfTestsRun; ++testId)
     {
-        for (size_t wordId = 0; wordId < text.linesCnt; ++wordId)
+        for (size_t wordId = 0; wordId < wordsAlignedSize; ++wordId)
         {
-            HashTableGetValue(hashTable, text.lines[wordId].line);
+            HashTableGetValue(hashTable, wordsAligned[wordId]);
         }
     }
 
@@ -102,6 +106,11 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
 
     TextTypeDtor(&text);
     HashTableDtor(hashTable);
+
+    for (size_t i = 0; i < text.linesCnt; ++i)
+        free(wordsAligned[i]);
+
+    free(wordsAligned);
 
     return timeSpent;
 }
