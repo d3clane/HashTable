@@ -56,7 +56,6 @@ HashTableElemType HashTableElemInit(const char* key, bool val)
     }
 
     elem.key = (char*)calloc(HashTableElemKeyLen, sizeof(*elem.key));
-
     memcpy(elem.key, key, HashTableElemKeyLen * sizeof(*elem.key));
     elem.val = val;
 
@@ -72,7 +71,5 @@ bool              HashTableElemsCmp(const HashTableElemType elem1,
     if (elem1.key == nullptr || elem2.key == nullptr)
         return false;
     
-    //assert(alignof(elem1.key) == 32 && alignof(elem2.key) == 32);
-
-    return strcmp(elem1.key, elem2.key) == 0 && elem1.val == elem2.val;
+    return AsmStrcmp(elem1.key, elem2.key) && elem1.val == elem2.val;
 }   

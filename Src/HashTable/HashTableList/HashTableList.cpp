@@ -485,7 +485,7 @@ HtListErrors HtListFindElemByKey(HtListType* list, const char* key, size_t* elem
     {
         const char* listKey = list->data[pos].value.key;
         
-        if (listKey && strcmp(listKey, key) == 0)
+        if (listKey && AsmStrcmp(listKey, key))
         {
             *elemPos = pos;
 
