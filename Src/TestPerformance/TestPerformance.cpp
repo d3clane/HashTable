@@ -98,6 +98,7 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
         }
     }
 
+    //assert(!HashTableGetValue(hashTable, "dedlox\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"));
     timeSpent = GetTimeStampCounter() - timeSpent;
 
     TextTypeDtor(&text);

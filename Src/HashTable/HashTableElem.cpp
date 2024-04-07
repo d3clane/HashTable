@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdalign.h>
+#include <stdio.h>
 
 #include "HashTableElem.h"
 
@@ -8,11 +10,20 @@ HashTableElemType HashTableElemCpy(const HashTableElemType elem)
 {
     HashTableElemType elemCopy = {};
 
-    elemCopy.key = elem.key ? strdup(elem.key) : nullptr;
+    if (elem.key == nullptr)
+    {   
+        elemCopy.key     = nullptr;
+        elemCopy.val = elem.val;
+
+        return elemCopy;
+    }
+
+    elemCopy.key = (char*)calloc(HashTableElemKeyLen, sizeof(*elemCopy.key));
+    memcpy(elemCopy.key, elem.key, HashTableElemKeyLen * sizeof(*elemCopy.key));
     elemCopy.val = elem.val;
 
     return elemCopy;
-}
+}   
 
 HashTableElemType HashTableElemCtor()
 {
@@ -45,7 +56,8 @@ HashTableElemType HashTableElemInit(const char* key, bool val)
     }
 
     elem.key = (char*)calloc(HashTableElemKeyLen, sizeof(*elem.key));
-    strcpy(elem.key, key);
+
+    memcpy(elem.key, key, HashTableElemKeyLen * sizeof(*elem.key));
     elem.val = val;
 
     return elem;
@@ -59,6 +71,8 @@ bool              HashTableElemsCmp(const HashTableElemType elem1,
 
     if (elem1.key == nullptr || elem2.key == nullptr)
         return false;
-        
+    
+    //assert(alignof(elem1.key) == 32 && alignof(elem2.key) == 32);
+
     return strcmp(elem1.key, elem2.key) == 0 && elem1.val == elem2.val;
 }   
