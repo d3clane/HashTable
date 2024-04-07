@@ -21,51 +21,54 @@ int main(const int argc, const char* argv[])
     UnitTestHashMap(RorHash,            testsInputFileName);
     UnitTestHashMap(MurMurHash,         testsInputFileName);
     */
-    UnitTestHashMap(CRC32Hash,          testsInputFileName);
+    //UnitTestHashMap(CRC32Hash,          testsInputFileName);
     
 
     static const size_t hashTableCapacity = 49157;
 
     /*
     MeasureHashTableListsSizes(hashTableCapacity, ConstantHash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/ConstantHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, FirstCharASCIIHash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/FirstCharASCIIHash.txt");
 
 
     MeasureHashTableListsSizes(hashTableCapacity, SumCharsASCIIHash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/SumCharsASCIIHash.txt");
 
     MeasureHashTableListsSizes(389, SumCharsASCIIHash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/SumCharsASCIIHashSmallCap.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, StringLengthHash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/StringLengthHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, RolHash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/RolHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, RorHash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/RorHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, MurMurHash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/MurMurHash.txt");
 
     MeasureHashTableListsSizes(hashTableCapacity, CRC32Hash, 
-                                "testsInputFileName",
+                                testsInputFileName,
                                 "../TestResults/ListSizesTest/CRC32Hash.txt");
 
     */
 
-    uint64_t time = HashTableBenchmark(hashTableCapacity, CRC32Hash, testsInputFileName);
-    printf("benchmark time - %llu\n", time);
+    //uint64_t time = HashTableBenchmark(hashTableCapacity, CRC32Hash, testsInputFileName);
+    //printf("Benchmark time CRC32           -  %llu\n", time);
+
+    printf("Benchmark time CRC32 intrinsics - %llu\n", 
+            HashTableBenchmark(hashTableCapacity, CRC32HashIntrinsic, testsInputFileName));
 }
