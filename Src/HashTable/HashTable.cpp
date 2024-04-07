@@ -199,19 +199,16 @@ bool HashTableGetValue(HashTableType* table, const char* key, HashTableErrors* e
     }
 
     HashTableElemType foundValue = {};
-    htListErr = HtListGetElem(table->buckets + bucketPos, elemPos, &foundValue);
+    htListErr = HtListGetElemNoCpy(table->buckets + bucketPos, elemPos, &foundValue);
 
     if (htListErr != HtListErrors::NO_ERR)
     {
         if (error) *error = HashTableErrors::HT_LIST_ERR;
 
-        HashTableElemDtor(&foundValue);
         return false;
     } 
 
     bool retValue = foundValue.val;
-
-    HashTableElemDtor(&foundValue);
 
     return retValue;
 }

@@ -71,7 +71,8 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     
     TextType text = {};
     TextTypeCtor(&text, inStreamFileName);
-    char** wordsAligned     = (char**)calloc(text.linesCnt, sizeof(*wordsAligned));
+    char*  wordsAligned     = (char*)calloc(text.linesCnt * HashTableElemKeyLen, 
+                                            sizeof(*wordsAligned)); 
     size_t wordsAlignedSize = text.linesCnt;
     Replace(text.text, '\n', '\0');
 
@@ -79,13 +80,8 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     {
         assert(strlen(text.lines[i].line) < HashTableElemKeyLen);
 
-        wordsAligned[i] = (char*)calloc(HashTableElemKeyLen, sizeof(*wordsAligned[i]));
-    }
-
-    for (size_t i = 0; i < wordsAlignedSize; ++i)
-    {
-        strncpy(wordsAligned[i], text.lines[i].line, HashTableElemKeyLen);
-        HashTableInsert(hashTable, wordsAligned[i], true);
+        strncpy(wordsAligned + i * HashTableElemKeyLen, text.lines[i].line, HashTableElemKeyLen);
+        HashTableInsert(hashTable, wordsAligned + i * HashTableElemKeyLen, true);
     }
 
     TextTypeDtor(&text);
@@ -98,7 +94,7 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     {
         for (size_t wordId = 0; wordId < wordsAlignedSize; ++wordId)
         {
-            HashTableGetValue(hashTable, wordsAligned[wordId]);
+            HashTableGetValue(hashTable, wordsAligned + wordId * HashTableElemKeyLen);
         }
     }
 
@@ -106,9 +102,6 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
 
     TextTypeDtor(&text);
     HashTableDtor(hashTable);
-
-    for (size_t i = 0; i < text.linesCnt; ++i)
-        free(wordsAligned[i]);
 
     free(wordsAligned);
 

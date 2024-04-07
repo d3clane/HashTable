@@ -424,7 +424,7 @@ HtListErrors HtListGetPrevElem(HtListType* list, size_t pos, size_t *prevElemPos
     return HtListErrors::NO_ERR;
 }
 
-HtListErrors HtListGetElem(HtListType* list, size_t pos, HashTableElemType* elemValue)
+HtListErrors HtListGetElemNoCpy(HtListType* list, size_t pos, HashTableElemType* elemValue)
 {
     assert(list);
     assert(elemValue);  
@@ -434,9 +434,21 @@ HtListErrors HtListGetElem(HtListType* list, size_t pos, HashTableElemType* elem
 
     HT_LIST_CHECK(list);
 
-    *elemValue = HashTableElemCpy(list->data[pos].value);
+    *elemValue = list->data[pos].value;
     
     return HtListErrors::NO_ERR;
+}
+
+HtListErrors HtListGetElem(HtListType* list, size_t pos, HashTableElemType* elemValue)
+{   
+    HtListErrors err = HtListGetElemNoCpy(list, pos, elemValue);
+
+    if (err != HtListErrors::NO_ERR)
+        return err;
+
+    *elemValue = HashTableElemCpy(*elemValue);
+
+    return err;
 }
 
 HtListErrors HtListSetElem(HtListType* list, size_t pos, const HashTableElemType newElemValue)
