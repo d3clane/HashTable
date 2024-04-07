@@ -66,9 +66,9 @@ int main(const int argc, const char* argv[])
 
     */
 
-    uint64_t time = HashTableBenchmark(hashTableCapacity, CRC32Hash, testsInputFileName);
-    printf("Benchmark time CRC32           -  %llu\n", time);
+    //uint64_t time = HashTableBenchmark(hashTableCapacity, CRC32Hash, testsInputFileName);
+    //printf("Benchmark time CRC32           -  %llu\n", time);
 
-    //printf("Benchmark time CRC32 intrinsics - %llu\n", 
-    //        HashTableBenchmark(hashTableCapacity, CRC32HashIntrinsic, testsInputFileName));
+    printf("Benchmark time CRC32 intrinsics - %llu\n", 
+            HashTableBenchmark(hashTableCapacity, CRC32HashIntrinsic, testsInputFileName));
 }

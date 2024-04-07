@@ -89,7 +89,7 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
 
     uint64_t timeSpent = GetTimeStampCounter();
 
-    static const size_t numberOfTestsRun = 100;
+    static const size_t numberOfTestsRun = 10;
     for (size_t testId = 0; testId < numberOfTestsRun; ++testId)
     {
         for (size_t wordId = 0; wordId < wordsAlignedSize; ++wordId)
