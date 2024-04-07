@@ -68,51 +68,41 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     assert(inStream);
 
     HashTableType* hashTable = HashTableCtor(hashTableCapacity, hashFunc);
+    
+    TextType text = {};
+    TextTypeCtor(&text, inStreamFileName);
+    char*  wordsAligned     = (char*)calloc(text.linesCnt * HashTableElemKeyLen, 
+                                            sizeof(*wordsAligned)); 
+    size_t wordsAlignedSize = text.linesCnt;
+    Replace(text.text, '\n', '\0');
 
-    char word[256];
-    size_t numberOfWords = 0;
-    while (true)
+    for (size_t i = 0; i < text.linesCnt; ++i)
     {
-        int scanfErr = fscanf(inStream, "%s", word);
+        assert(strlen(text.lines[i].line) < HashTableElemKeyLen);
 
-        if (scanfErr == EOF)
-            break;
-
-        HashTableInsert(hashTable, word, true);
-        
-        ++numberOfWords;
+        strncpy(wordsAligned + i * HashTableElemKeyLen, text.lines[i].line, HashTableElemKeyLen);
+        HashTableInsert(hashTable, wordsAligned + i * HashTableElemKeyLen, true);
     }
 
+    TextTypeDtor(&text);
     fclose(inStream);
-
-    //TextType text = {};
-    //TextTypeCtor(&text, inStreamFileName);
-    //Replace(text.text, '\n', '\0');
 
     uint64_t timeSpent = GetTimeStampCounter();
 
-    static const size_t numberOfTestsRun = 10;
+    static const size_t numberOfTestsRun = 100;
     for (size_t testId = 0; testId < numberOfTestsRun; ++testId)
     {
-        rewind(inStream);
-        while (true)
+        for (size_t wordId = 0; wordId < wordsAlignedSize; ++wordId)
         {
-            int scanfErr = fscanf(inStream, "%s", word);
-
-            if (scanfErr == EOF)
-                break;
-
-            HashTableGetValue(hashTable, word);
+            HashTableGetValue(hashTable, wordsAligned + wordId * HashTableElemKeyLen);
         }
-
     }
 
     timeSpent = GetTimeStampCounter() - timeSpent;
 
-    //TextTypeDtor(&text);
     HashTableDtor(hashTable);
 
-    fclose(inStream);
-    
+    free(wordsAligned);
+
     return timeSpent;
 }
