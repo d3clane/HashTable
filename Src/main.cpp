@@ -24,7 +24,7 @@ int main(const int argc, const char* argv[])
     //UnitTestHashMap(CRC32Hash,          testsInputFileName);
     
 
-    static const size_t hashTableCapacity = 49157;
+    static const size_t hashTableCapacity = 528000;
 
     /*
     MeasureHashTableListsSizes(hashTableCapacity, ConstantHash, 
