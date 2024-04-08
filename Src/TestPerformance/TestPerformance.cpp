@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <math.h>
 #include <string.h>
+#include <inttypes.h>
 
 #include "TestPerformance.h"
 #include "HashTable/HashTable.h"
@@ -87,14 +88,22 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     TextTypeDtor(&text);
     fclose(inStream);
 
+#ifdef BASELINE
+    uintptr_t ptrCalc = 0;
+#endif
+
     uint64_t timeSpent = GetTimeStampCounter();
 
-    static const size_t numberOfTestsRun = 10;
+    static const size_t numberOfTestsRun = 100;
     for (size_t testId = 0; testId < numberOfTestsRun; ++testId)
     {
         for (size_t wordId = 0; wordId < wordsAlignedSize; ++wordId)
         {
+        #ifdef BASELINE
+            ptrCalc += (uintptr_t)(wordsAligned + wordId * HashTableElemKeyLen);
+        #else
             HashTableGetValue(hashTable, wordsAligned + wordId * HashTableElemKeyLen);
+        #endif
         }
     }
 
@@ -104,6 +113,10 @@ uint64_t HashTableBenchmark(size_t hashTableCapacity, HashFuncType hashFunc,
     HashTableDtor(hashTable);
 
     free(wordsAligned);
+
+#ifdef BASELINE
+    printf("%res - %" PRIuPTR "\n", ptrCalc);
+#endif
 
     return timeSpent;
 }

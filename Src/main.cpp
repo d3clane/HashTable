@@ -65,6 +65,7 @@ int main(const int argc, const char* argv[])
 
     */
     
+    /*
     MeasureHashTableListsSizes(389, SumCharsASCIIHash, 
                             "../TestsInput/ListSizesTest/wordsCommon.txt",
                             "../TestResults/ListSizesTest/SumCharsASCIIHashSmallCapCommon.txt");
@@ -73,6 +74,8 @@ int main(const int argc, const char* argv[])
                             "../TestsInput/ListSizesTest/wordsCommon.txt",
                             "../TestResults/ListSizesTest/SumCharsASCIIHashCommon.txt");
 
+    */
+   
     //uint64_t time = HashTableBenchmark(hashTableCapacity, CRC32Hash, testsInputFileName);
     //printf("Benchmark time CRC32           -  %llu\n", time);
 
