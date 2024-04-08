@@ -1,3 +1,4 @@
+
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
@@ -470,32 +471,6 @@ HtListErrors HtListSetElem(HtListType* list, size_t pos, const HashTableElemType
     HT_LIST_CHECK(list);
 
     return HtListErrors::NO_ERR;
-}
-
-HtListErrors HtListFindElemByKey(HtListType* list, const char* key, size_t* elemPos)
-{
-    assert(list);
-    assert(elemPos);
-
-    HT_LIST_CHECK(list);
-
-    size_t pos = list->end;
-
-    do
-    {
-        const char* listKey = list->data[pos].value.key;
-        
-        if (listKey && AsmStrcmp(listKey, key))
-        {
-            *elemPos = pos;
-
-            return HtListErrors::NO_ERR;
-        }
-        
-        HtListGetNextElem(list, pos, &pos);
-    } while (pos != list->end);
-    
-    return HtListErrors::NO_ELEMENT_FOUND;
 }
 
 static inline void HtListDataInit(HtListElemType* list, 

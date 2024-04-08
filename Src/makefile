@@ -27,9 +27,11 @@ HASH_TABLE_DIR     	= HashTable
 HASH_TABLE_CPP	  	= HashTable.cpp HashTableElem.cpp
 HASH_TABLE_OBJ	  	= $(HASH_TABLE_CPP:%.cpp=$(OBJECTDIR)/%.o)
 
-HASH_TABLE_LIST_DIR = HashTable/HashTableList
-HASH_TABLE_LIST_CPP = HashTableList.cpp
-HASH_TABLE_LIST_OBJ = $(HASH_TABLE_LIST_CPP:%.cpp=$(OBJECTDIR)/%.o)
+HASH_TABLE_LIST_DIR  = HashTable/HashTableList
+HASH_TABLE_LIST_CPP  = HashTableList.cpp
+HASH_TABLE_LIST_ASM  = HashTableListAsm.s
+HASH_TABLE_LIST_OBJ  = $(HASH_TABLE_LIST_CPP:%.cpp=$(OBJECTDIR)/%.o)
+HASH_TABLE_LIST_OBJ += $(HASH_TABLE_LIST_ASM:%.s=$(OBJECTDIR)/%.o)
 
 HASHES_DIR      	= Hashes
 HASHES_CPP			= Hashes.cpp
@@ -47,7 +49,7 @@ FAST_IO_OBJ			= $(FAST_IO_CPP:%.cpp=$(OBJECTDIR)/%.o)
 	
 all: $(TARGET)
 
-$(TARGET): $(HASH_TABLE_OBJ) $(HASHES_OBJ) $(COMMON_OBJ) $(HASH_TABLE_LIST_OBJ) \
+$(TARGET): $(HASH_TABLE_LIST_OBJ) $(HASH_TABLE_OBJ) $(HASHES_OBJ) $(COMMON_OBJ) \
 					     $(MAIN_OBJ) $(UNIT_TEST_OBJ) $(TEST_PERFORMANCE_OBJ) $(FAST_IO_OBJ)
 	$(CXX) $^ -o $(TARGET) $(CXXFLAGS)
 
@@ -65,6 +67,9 @@ $(OBJECTDIR)/%.o : $(COMMON_DIR)/%.cpp
 
 $(OBJECTDIR)/%.o : $(HASH_TABLE_LIST_DIR)/%.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 
+
+$(OBJECTDIR)/%.o : $(HASH_TABLE_LIST_DIR)/%.s
+	$(ASM) -f elf64 $< -o $@
 
 $(OBJECTDIR)/%.o : $(UNIT_TEST_DIR)/%.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 

@@ -58,7 +58,8 @@ HtListErrors HtListGetPrevElem (HtListType* list, size_t pos, size_t *prevElemPo
 HtListErrors HtListGetElem     (HtListType* list, size_t pos, HashTableElemType* elemValue);
 HtListErrors HtListGetElemNoCpy(HtListType* list, size_t pos, HashTableElemType* elemValue);
 HtListErrors HtListSetElem     (HtListType* list, size_t pos, const HashTableElemType newElemValue);
-HtListErrors HtListFindElemByKey(HtListType* list, const char* key, size_t* elemPos);
+
+extern "C" HtListErrors HtListFindElemByKey(HtListType* list, const char* key, size_t* elemPos);
 
 size_t HtListGetHead(const HtListType* list);
 size_t HtListGetTail(const HtListType* list);
