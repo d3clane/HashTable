@@ -392,8 +392,8 @@ uint32_t CRC32Hash(const char* inString)
 |                       |Стандартное отклонение |
 |---                    |---                    |
 |Constant hash          | 1669.3                |
-|First char ASCII hash  | 403.4                 |
 |String length hash     | 525.9                 |
+|First char ASCII hash  | 403.4                 |
 |Sum chars ASCII hash   | 63.7                  |
 |Ror hash               | 18.0                  |
 |Rol hash               | 8.3                   |
