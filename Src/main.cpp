@@ -22,9 +22,8 @@ int main(const int argc, const char* argv[])
     UnitTestHashMap(MurMurHash,         testsInputFileName);
     */
     //UnitTestHashMap(CRC32Hash,          testsInputFileName);
-    
 
-    static const size_t hashTableCapacity = 528000;
+    static const size_t hashTableCapacity = 49157;
 
     /*
     MeasureHashTableListsSizes(hashTableCapacity, ConstantHash, 
@@ -65,6 +64,14 @@ int main(const int argc, const char* argv[])
                                 "../TestResults/ListSizesTest/CRC32Hash.txt");
 
     */
+    
+    MeasureHashTableListsSizes(389, SumCharsASCIIHash, 
+                            "../TestsInput/ListSizesTest/wordsCommon.txt",
+                            "../TestResults/ListSizesTest/SumCharsASCIIHashSmallCapCommon.txt");
+
+    MeasureHashTableListsSizes(hashTableCapacity, SumCharsASCIIHash, 
+                            "../TestsInput/ListSizesTest/wordsCommon.txt",
+                            "../TestResults/ListSizesTest/SumCharsASCIIHashCommon.txt");
 
     //uint64_t time = HashTableBenchmark(hashTableCapacity, CRC32Hash, testsInputFileName);
     //printf("Benchmark time CRC32           -  %llu\n", time);
