@@ -1,5 +1,14 @@
 # Исследование хеш-таблиц
 
+## Установка и запуск
+
+```
+cd Src
+make buildDirs
+make 
+./hashTable
+```
+
 ## Описание
 
 В данном проекте реализована хеш-таблица методом цепочек и исследованы следующие ее части:
@@ -28,15 +37,6 @@ $$k \equiv r \cdot k \pmod{hashTableSize}$$, где $r - 1$ получается
 $$k + hashTableSize \cdot \alpha = r \cdot k$$, где $\alpha$ - какое-то целое число. Наименьшее $k$, когда это выполняется - $r \cdot k = LCM(k, hashTableSize)$, то есть $r \cdot k = \frac{k \cdot hashTableSize}{GCD(k, hashTableSize)}$ или $$r = \frac{hashTableSize}{GCD(k, hashTableSize)}$$. 
 
 Получается, что взяв hashTableSize простым числом мы с большей вероятностью получим $GCD(k, hashTableSize) = 1$, то есть сможем заполнить все клетки хеш-таблицы. 
-
-## Установка и запуск
-
-```
-cd Src
-make buildDirs
-make 
-./hashTable
-```
 
 ## Исследование хеш-функций
  
