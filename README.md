@@ -24,7 +24,7 @@ make
 
 Схематичный вид хеш-таблицы:
 
-![hash table](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/HashTable.png)
+![hash table](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/HashTable.png)
 
 На картинке показано, что два входных значения с ключами "emberlizard" и "soggyturtle" на выходе с хеш-функции получают одно и то же значение, а значит попадают в одну ячейку хеш-таблицы. Здесь используется список, чтобы последовательно сохранить эти значения в одной ячейке - как бы цепочка.
 
@@ -72,11 +72,11 @@ uint32_t ConstantHash(const char* inString)
 
 Очевидно, что с такой хеш-функцией в хеш-таблице всегда будет заполняться только одна ячейка и работать будет медленно:
 
-![ConstantHash](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/ConstantHash.png). 
+![ConstantHash](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/ConstantHash.png). 
 
 В увеличенном масштабе:
 
-![ConstantHashClose](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/ConstantHashClose.png)
+![ConstantHashClose](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/ConstantHashClose.png)
 
 Стандартное отклонение - 1669.3.
 
@@ -97,11 +97,11 @@ uint32_t FirstCharASCIIHash(const char* inString)
 
 Ожидаемо, распределение должно быть в границах $[97, 122]$, где 97 - ASCII код буквы 'a', 122 - ASCII код буквы 'z'. То есть заполняется очень малое число ячеек. Гистограмма распределения:
 
-![First char ASCII](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/FirstCharASCIIHash.png)
+![First char ASCII](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/FirstCharASCIIHash.png)
 
 В увеличенном масштабе:
 
-![First char ASCII close](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/FirstCharASCIIHashClose.png)
+![First char ASCII close](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/FirstCharASCIIHashClose.png)
 
 Стандартное отклонение - 403.4.
 
@@ -124,11 +124,11 @@ uint32_t StringLengthHash(const char* inString)
 
 Средняя длина английского слова - 4.7, считается что самое длинное слово - pneumonoultramicroscopicsilicovolcanoconiosis, длина которого 45. Получается, что на нашем датасете значения будут в границах [1, 45], причем ожидается нормальное распределение, так как фактически слов очень малой и очень большой длины сильно меньше, чем слов средней длины. Проверим на практике:
 
-![string length hash](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/StringLengthHash.png)
+![string length hash](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/StringLengthHash.png)
 
 В увеличенном масштабе:
 
-![string length hash close](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/StringLengthHashClose.png)
+![string length hash close](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/StringLengthHashClose.png)
 
 Стандартное отклонение - 525.9.
 
@@ -160,31 +160,31 @@ uint32_t SumCharsASCIIHash(const char* inString)
 
 Полученный график:
 
-![ASCII sum small cap](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/SumCharsASCIIHashSmallCap.png)
+![ASCII sum small cap](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/SumCharsASCIIHashSmallCap.png)
 
 Также проверим на другом [датасете](/TestsInput/ListSizesTest/wordsCommon.txt) из 3000 самых популярных английских слов, для них load-factor = 7.7:
 
-![ASCII sum small cap common](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/SumCharsASCIIHashSmallCapCommon.png)
+![ASCII sum small cap common](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/SumCharsASCIIHashSmallCapCommon.png)
 
 Казалось бы - неплохая хеш-функция - в первом случае ее проблема в гигантском load-factor'е, а в случае с топ 3000 самыми популярными английскими словами выглядит вполне неплохо. Получается, если увеличить размер хеш-таблицы, получится очень хорошее распределение, так ведь? Проверим.
 
 Вернемся к прошлому размеру хеш-таблицы. Полученный график для датасета из 370к слов:
 
-![ASCII sum](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/SumCharsASCIIHash.png)
+![ASCII sum](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/SumCharsASCIIHash.png)
 
 В увеличенном масштабе:
 
-![ASCII sum close](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/SumCharsASCIIHashClose.png)
+![ASCII sum close](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/SumCharsASCIIHashClose.png)
 
 Стандартное отклонение - 63.7.
 
 Для датасета из 3к слов:
 
-![ASCII sum common](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/SumCharsASCIIHashCommon.png)
+![ASCII sum common](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/SumCharsASCIIHashCommon.png)
 
 В увеличенном масштабе:
 
-![ASCII sum common close](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/SumCharsASCIIHashCommonClose.png)
+![ASCII sum common close](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/SumCharsASCIIHashCommonClose.png)
 
 А пики никуда не исчезли...
 
@@ -219,17 +219,17 @@ static inline uint32_t Rol(uint32_t dWord)
 
 Помимо хеширования интересует следующий момент - на ассемблере существует инструкция `rol`, сможет ли компилятор увидеть это и заменить вызов моей функции `Rol` просто инструкцией. Проверим это в godbolt'e. 
 
-![No opt rol](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/NoOptRol.png)
+![No opt rol](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/NoOptRol.png)
 
 Даже без оптимизаций компилятор смог заметить, что это инструкция rol и заменить ее! Правда, все равно оставил вызов моей функции Rol. А теперь с оптимизацией -O1:
 
-![Opt rol](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/OptRol.png)
+![Opt rol](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/OptRol.png)
 
 Компилятор полностью избавился от вызова функции Rol и заменил его инструкцией rol. C флагами -O2, -O3 никаких оптимизаций с инструкцией rol больше не происходит. 
 
 Теперь график распределения:
 
-![Rol hash](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/RolHash.png)
+![Rol hash](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/RolHash.png)
 
 Стандартное отклонение - 8.3.
 
@@ -264,7 +264,7 @@ static inline uint32_t Ror(uint32_t dWord)
 
 Результаты в godbolt абсолютно такие же, компилятор замечает, что это инструкция ror. График заполненности:
 
-![Ror hash](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/RorHash.png)
+![Ror hash](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/RorHash.png)
 
 Стандартное отклонение - 18.0
 
@@ -336,11 +336,11 @@ uint32_t MurMurHash(const char* inString)
 
 Распределение на графике:
 
-![MurMurHash](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/MurMurHash.png)
+![MurMurHash](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/MurMurHash.png)
 
 Из-за особенностей масштаба на графике не видно, что на самом деле существуют списки с не очень большими размерами. Догадаться о их существовании легко - если судить по графику, то получится, что load-factor не соответствует заявленному (по графику он кажется явно больше 7.5). Как раз для таких случаев и нужен подсчет стандартного отклонения, чтобы дополнительно по формулам оценить и сопоставить с визуальными результатами. MurMurHash в увеличенном масштабе:
 
-![MurMurHash close](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/MurMurHashClose.png)
+![MurMurHash close](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/MurMurHashClose.png)
 
 Стандартное отклонение - 2.74. 
 
@@ -375,11 +375,11 @@ uint32_t CRC32Hash(const char* inString)
 
 Распределение на графике:
 
-![CRC32 hash](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/CRC32Hash.png)
+![CRC32 hash](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/CRC32Hash.png)
 
 Здесь тоже из-за особенностей масштаба не видно, что на самом деле есть и списки с не очень большими размерами. В увеличенном масштабе получится:
 
-![CRC32 hash close](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/CRC32HashClose.png)
+![CRC32 hash close](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/CRC32HashClose.png)
 
 Стандартное отклонение - 2.75.
 
@@ -451,13 +451,13 @@ $$balance = \frac{\frac{T}{T_0}}{NumberOfOptimizingCodeLines} \cdot 1000$$
 
 Используем `valgrind --tool=cachegrind` и посмотрим, насколько оптимизированно мы используем кеш в программе. Результат:
 
-![Cache grind](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/CacheGrind.png)
+![Cache grind](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/CacheGrind.png)
 
 Видно, что мы и так оптимизированно используем кеш и нет особых предпосылок для того, чтобы пытаться что-то еще сильнее улучшить - кардинальных улучшений производительности не получить. 
 
 Теперь рассмотрим непосредственно время, потраченное на вызов различных функций. Результат, полученный с помощью valgrind:
 
-![CallGrindNoOpt](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/CallGrindCRC32Opt.png)
+![CallGrindNoOpt](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/CallGrindCRC32Opt.png)
 
 Функции отсортированы по значению во второму столбце. Этот столбец отвечает за время, потраченное непосредственно на код самой функции без учета времени, потраченного на функции, вызванные из-под нее. Время выполнение различных частей указывается в процентах от общего времени выполнения. Рассмотрим первые две строчки:
 
@@ -517,7 +517,7 @@ uint32_t CRC32HashIntrinsic(const char* inString)
 
 Снова запустим valgrind:
 
-![CallGrindCRC32Intrinsic](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/CallGrindStrCmpOpt.png)
+![CallGrindCRC32Intrinsic](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/CallGrindStrCmpOpt.png)
 
 Видно, что теперь узким местом является функция strcmp, которая и так была оптимизирована компилятором с использованием SSE инструкций. 
 
@@ -648,7 +648,7 @@ static inline int AsmStrcmp(const char* str1, const char* str2)
 
 Снова запустим valgrind:
 
-![list opt](https://github.com/d3clane/HashTable/blob/main/ReadmeAssets/imgs/CallGrindListOpt.png)
+![list opt](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/CallGrindListOpt.png)
 
 Видно, что теперь самая "тяжелая" функция - поиск элемента в списке по ключу. Вот ее код:
 
