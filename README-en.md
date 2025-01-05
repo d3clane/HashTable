@@ -23,6 +23,8 @@ In this project, a hash table is implemented using the chain method and the foll
 1. Hash functions to see which one distributes the most evenly across the hash table. 
 2. Performance of hash table lookup operation and possibilities to optimize it.
 
+It is important that in this project hash table size is pretty small and therefore load-factor is huge. Actually, there could be no need in these optimizations, because hash table works pretty well with simply scaling it's size and using evenly spreading hash function. However, the goal of this project is to learn how assembler optimization works and therefore we make this assumption.
+
 Let's describe how a hash table is organized.
 
 ## Hash table description
@@ -644,7 +646,7 @@ Performance gains:
 |--- |--- |--- |
 | Naive implementation | 1 | 1 |
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ |
-|Strcmp inlined asm | $2.50 \pm 0.16 | $1.39 \pm 0.11 |
+|Strcmp inlined asm | $2.50 \pm 0.16$ | $1.39 \pm 0.11$ |
 
 The gain is still satisfactory, we leave the optimization in place.
 
@@ -823,8 +825,8 @@ The characteristic running time of the program is about 10 seconds.
 |--- |--- |--- |
 | Naive implementation | 1 | 1 | 1 |
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ |
-|Strcmp inlined asm | $2.50 \pm 0.16 | $1.39 \pm 0.11 |
-|list find elem asm | $2.79 \pm 0.14 | $1.12 \pm 0.09 |
+|Strcmp inlined asm | $2.50 \pm 0.16$ | $1.39 \pm 0.11$ |
+|list find elem asm | $2.79 \pm 0.14$ | $1.12 \pm 0.09$ |
 
 The last optimization is still significant - as much as 12%, so it makes sense to try to optimize further. Initially, I thought that this was not a very high increase, but as I was told it was not, so I will do more profiling steps in the future, as long as the optimizations make sense. Generally speaking, having looked at the profiling results already now, it can be seen that the only function left "in the top" is the one responsible for hash table lookup, while the rest are related to input/output. Therefore, we can assume that there is no more than one optimization left to speed up hash table search.
 
@@ -846,19 +848,19 @@ For the sake of purity of the experiment, it is also worth checking the speed of
 
 Summary table of results:
 
-| Absolute acceleration | Relative acceleration | Time in processor cycles |
-|--- |--- |--- |--- | 
-| Naive implementation | 1 | 1 | $(508 \pm 8) \cdot 10^8$ | 
-|Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ | $(282 \pm 8) \cdot 10^8$ |
-|Strcmp inlined asm | $2.50 \pm 0.16$ | $1.39 \pm 0.11$ | $(203 \pm 10) \cdot 10^8$ |
-|list find elem asm | $2.79 \pm 0.14$ | $1.12 \pm 0.09$ | $(182 \pm 6) \cdot 10^8$ |
-|load-factor 0.7 | $3.97 \pm 0.16 | $1.42 \pm 0.08 | $(128 \pm 3) \cdot 10^8$ |
+|                     |Absolute acceleration |Relative acceleration | Time in CPU ticks |
+|---                |---                |---                  |---                      | 
+|Naive implementation   | 1                   |  1                    | $(508 \pm 8) \cdot 10^8$  | 
+|Intrinsic CRC32      | $1.80 \pm 0.08$     | $1.80 \pm 0.08$       | $(282 \pm 8) \cdot 10^8$  |
+|Strcmp inlined asm   | $2.50 \pm 0.16$     | $1.39 \pm 0.11$       | $(203 \pm 10) \cdot 10^8$ |
+|list find elem asm   | $2.79 \pm 0.14$     | $1.12 \pm 0.09$       | $(182 \pm 6) \cdot 10^8$  |
+|load-factor 0.7      | $3.97 \pm 0.16$     | $1.42 \pm 0.08$       | $(128 \pm 3) \cdot 10^8$  |
 
 It turns out that the optimal choice of load-factor can significantly improve the speed of the program. 
 
 Let's calculate the $balance$ coefficient using the formula:
 
-$$balance = \frac{\frac{\frac{T}{T_0}}{NumberOfOptimizingCodeLines} {\cdot 1000$$
+$$balance = \frac{\frac{T}{T_0}}{NumberOfOptimizingCodeLines} \cdot 1000$$
 
 Let's calculate it for the cases of Strcmp inlined asm and list find elem asm. We won't calculate it for the case with load-factor reduction because this optimization didn't actually affect the assembler in any way. 
 
