@@ -286,7 +286,7 @@ uint32_t MurMurHash(const char* inString)
 
     static const uint32_t seed = time(NULL);
 
-    const uint32_t c1 = 0x5bd1e995; 
+    const uint32_t c1 = 0x5bd1e995;
     const uint32_t c2 = 24;
 
     size_t length = strlen(inString);
@@ -736,36 +736,36 @@ Let's see what it compiles into:
 
 ```
 HtListFindElemByKey(HtListType*, char const*, unsigned long*):
-        mov r9, QWORD PTR [rdi+8] ; list end is written to r9
-        mov r10, QWORD PTR [rdi] ; in r10 list data
-        xor r11d, r11d ; r11d is reset to zero
-        mov rcx, r9 ; in rcx list end
+        mov r9, QWORD PTR [rdi+8]       ; list end is written to r9
+        mov r10, QWORD PTR [rdi]        ; in r10 list data
+        xor r11d, r11d                  ; r11d is reset to zero
+        mov rcx, r9                     ; in rcx list end
 .L4:
-        mov rax, rcx ; pos is written to rax
-        sal rax, 5 ; multiply by 32 as sizeof(HtListElemType)
-        add rax, r10 ; shift relative to list->data
-        mov r8, QWORD PTR [rax] ; list->data[pos].value.key item is put in r8 
-        test r8, r8 ; 
-        je .L2 ; jump if r8 == nullptr
-        mov edi, r11d ; edi = 0
+        mov rax, rcx                    ; pos is written to rax
+        sal rax, 5                      ; multiply by 32 as sizeof(HtListElemType)
+        add rax, r10                    ; shift relative to list->data
+        mov r8, QWORD PTR [rax]         ; list->data[pos].value.key item is put in r8 
+        test r8, r8                     ; 
+        je .L2                          ; jump if r8 == nullptr
+        mov edi, r11d                   ; edi = 0
 
-        .intel_syntax noprefix ; \
-        vmovdqu ymm0, YMMWORD PTR [r8] ; | |
-        vptest ymm0, YMMWORD PTR [rsi] ; Asm strcmp inlined
-        setc dil ; |
-        vzeroupper ; /
+        .intel_syntax noprefix          ; \
+        vmovdqu ymm0, YMMWORD PTR [r8]  ; |
+        vptest ymm0, YMMWORD PTR [rsi]  ; Asm strcmp inlined
+        setc dil                        ; |
+        vzeroupper                      ; /
 
-        test edi, edi ; test asm strcmp res 
-        jne .L13 ; if asm strcmp res != 0 -> jmp L13
+        test edi, edi                   ; test asm strcmp res 
+        jne .L13                        ; if asm strcmp res != 0 -> jmp L13
 .L2:
-        mov rcx, QWORD PTR [rax+24] ; rcx = list->data[pos].nextPos
-        cmp r9, rcx ; compares rcx and list->end
-        jne .L4 ; loop if rcx != list->end
-        mov eax, 8 ; return NO_ELEMENT_FOUND
+        mov rcx, QWORD PTR [rax+24]     ; rcx = list->data[pos].nextPos
+        cmp r9, rcx                     ; compares rcx and list->end
+        jne .L4                         ; loop if rcx != list->end
+        mov eax, 8                      ; return NO_ELEMENT_FOUND
         ret
 .L13:
-        mov QWORD PTR [rdx], rcx ; load response into *elemPos 
-        xor eax, eax ; return NO_ERR
+        mov QWORD PTR [rdx], rcx        ; load response into *elemPos 
+        xor eax, eax                    ; return NO_ERR
         ret 
 ```
 
@@ -777,35 +777,35 @@ Note the possible optimizations:
 Let's rewrite using our optimizations:
 
 ```
-HtListFindElemByKey: ; (HtListType* list, const char* key, size_t* elemPos)
-        mov r9, QWORD [rdi] ; r9 = list->data
-        xor ecx, ecx ; ecx = 0 (start position)
-        xor r10d, r10d ; r10d = 0
+HtListFindElemByKey:                ; (HtListType* list, const char* key, size_t* elemPos)
+        mov r9, QWORD [rdi]         ; r9 = list->data
+        xor ecx, ecx                ; ecx = 0 (start position)
+        xor r10d, r10d              ; r10d = 0
 
-        vmovdqu ymm0, YWORD [rsi] ; loading key to ymm0
+        vmovdqu ymm0, YWORD [rsi]   ; loading key to ymm0
 DO_WHILE_BODY:
-        mov rax, rcx ; rax = pos
-        sal rax, 5 ; rax * sizeof(HtListElemType)
-        add rax, r9 ; rax = list->data + pos
-        mov r8, QWORD [rax] ; r8 = list->data[pos].value.key
-        test r8, r8 ;
-        je DO_WHILE_CONDITION ; if r8 == null jmp to condition
+        mov rax, rcx                ; rax = pos
+        sal rax, 5                  ; rax * sizeof(HtListElemType)
+        add rax, r9                 ; rax = list->data + pos
+        mov r8, QWORD [rax]         ; r8 = list->data[pos].value.key
+        test r8, r8                 ;
+        je DO_WHILE_CONDITION       ; if r8 == null jmp to condition
         
-        vptest ymm0, YWORD [r8] ;
-        jc HT_LIST_RET ; compare r8 and key. If equal -> ret
+        vptest ymm0, YWORD [r8]     ;
+        jc HT_LIST_RET              ; compare r8 and key. If equal -> ret
 
 DO_WHILE_CONDITION:
-        mov rcx, QWORD [rax+24] ; rcx = list->data[pos].nextPos
-        test rcx, rcx ;
-        jne DO_WHILE_BODY ; if rcx != 0 -> continue
-        mov eax, 8 ; return NO_ELEMENT_FOUND
+        mov rcx, QWORD [rax+24]     ; rcx = list->data[pos].nextPos
+        test rcx, rcx               ;
+        jne DO_WHILE_BODY           ; if rcx != 0 -> continue
+        mov eax, 8                  ; return NO_ELEMENT_FOUND
 
         vzeroupper
         ret
 
 HT_LIST_RET:
-        mov QWORD [rdx], rcx ; *elemPos = pos
-        xor eax, eax ; return NO_ERR
+        mov QWORD [rdx], rcx        ; *elemPos = pos
+        xor eax, eax                ; return NO_ERR
 
         vzeroupper
         ret
