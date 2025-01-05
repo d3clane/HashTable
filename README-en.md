@@ -7,7 +7,7 @@ Translated using DeepL translator.
 1. [Russian](/README.md)
 2. [English](/README-en.md)
 
-## Installation and startup
+## Installation and run
 
 ```
 cd Src
@@ -20,7 +20,7 @@ make
 
 In this project, a hash table is implemented using the chain method and the following parts of it are investigated:
 
-1. hash functions to see which one distributes the most evenly across the hash table. 
+1. Hash functions to see which one distributes the most evenly across the hash table. 
 2. Performance of hash table lookup operation and possibilities to optimize it.
 
 Let's describe how a hash table is organized.
@@ -62,7 +62,7 @@ It's not hard to see that some of these are knowingly bad, but still necessary f
 
 The study will be both visual and formulaic - graphs are plotted, compared, and the standard deviation is calculated. The standard deviation is calculated using the formula: 
 
-$$standardDeviation = \sqrt{\sqrt{\frac{\sum\limits_{i = 0}^{n} (x_i - x_{mean})^2}{n}}$$$ where $x_i$ is the length of the i-th chain, $x_{mean}$$ is the average length of the chain, and $n$ is the number of such chains. In my case, $n = 49157$.
+$$standardDeviation = \sqrt{\frac{\sum\limits_{i = 0}^{n} (x_i - x_{mean})^2}{n}}$$ where $x_i$ is the length of the i-th chain, $x_{mean}$ is the average length of the chain, and $n$ is the number of such chains. In my case, $n = 49157$.
 
 ### Constant hash
 
@@ -129,7 +129,7 @@ uint32_t StringLengthHash(const char* inString)
 
 This hash function returns the length of the string.
 
-The average length of an English word is 4.7, it is considered that the longest word is pneumononoultramicroscopicsilicovolcanoconiosis, the length of which is 45. It turns out that on our dataset the values will be in the boundaries of [1, 45], and a normal distribution is expected, since in fact words of very short and very long length are strongly less than words of average length. Let's check it in practice:
+The average length of an English word is 4.7, it is considered that the longest word is pneumonoultramicroscopicsilicovolcanoconiosis, the length of which is 45. It turns out that on our dataset the values will be in the boundaries of [1, 45], and a normal distribution is expected, since in fact words of very short and very long length are strongly less than words of average length. Let's check it in practice:
 
 ![string length hash](https://github.com/d3clane/HashTable/blob/master/ReadmeAssets/imgs/StringLengthHash.png)
 
@@ -265,7 +265,7 @@ static inline uint32_t Ror(uint32_t dWord)
 }
 ```
 
-This hash function is similar to RolHash, only $hash(n) = ROR(hash(n - 1))) \oplus str[n]$. ROR is a bitwise rotate right operation.
+This hash function is similar to RolHash, only $hash(n) = ROR(hash(n - 1)) \oplus str[n]$. ROR is a bitwise rotate right operation.
 
 The results in godbolt are exactly the same, the compiler notices that it is a ror instruction. Occupancy graph:
 
@@ -273,7 +273,7 @@ The results in godbolt are exactly the same, the compiler notices that it is a r
 
 The standard deviation is 18.0
 
-The distribution is worse than for RolHash as there are very high peaks. What can this be related to? The average word size is around 5 - 16 characters. I get about 5-16 rotate right of my hash, which means that the top 5 - 16 bits of my hash are very much filled. And then this hash is taken modulo $49157$ and all these bits become sharply unimportant, and, as a result, very many hashes match modulo.
+The distribution is worse than for RolHash as there are very high peaks. What can this be related to? The average word size is around 5 - 16 characters. I get about 5-16 rotate right of my hash, which means that the top 5 - 16 bits of my hash are very much filled. And then this hash is taken modulo $49157$ and all these bits become sharply unimportant, and, as a result, very many hashes match by modulo.
 
 ### Murmur hash
 
@@ -394,16 +394,16 @@ It is also a well-distributing hash function.
 
 Summary table of standard deviations for different hash functions:
 
-| | Standard deviation | Standard deviation |
-|:---: |:---: |
-|Constant hash | 1669.3 |
-|String length hash | 525.9 |
-|First char ASCII hash | 403.4 |
-|Sum chars ASCII hash | 63.7 |
-|Ror hash | 18.0 |
-|Rol hash | 8.3 |
-|CRC32 hash | 2.75 |
-|Murmur hash | 2.74 |
+|                       |Standard deviation     |
+|:---:                  |:---:                  |
+|Constant hash          | 1669.3                |
+|String length hash     | 525.9                 |
+|First char ASCII hash  | 403.4                 |
+|Sum chars ASCII hash   | 63.7                  |
+|Ror hash               | 18.0                  |
+|Rol hash               | 8.3                   |
+|CRC32 hash             | 2.75                  |
+|Murmur hash            | 2.74                  |
 
 Obviously, you should choose between MurMurHash and CRC32 Hash, because the distribution is the most uniform, and there is no special difference between the distributions - both visually and by standard deviation they are as similar as possible. The next selection criterion may be the speed of each hash function - they are called during insertion / deletion / search operations in the hash table, i.e. quite often. For my hash table I will choose CRC32 because this choice will give me more room for optimizations in the second part of the work - there are intrinsic-i that implement the CRC32 hashing algorithm, so there is a possibility for acceleration. 
 
@@ -426,7 +426,7 @@ We will improve the performance of the program in three ways:
 
 It is not difficult to understand that such optimizations are not always good. Their use is strongly tied to a particular architecture, the code becomes harder to maintain and read, so you should keep a balance between the lines of codes written for optimization and the performance gain obtained. If the gain is insignificant but the code changes dramatically, you should rather refuse such optimization than use it. To estimate the balance between the written lines of code and the performance gain we will use the following coefficient:
 
-$$balance = \frac{\frac{\frac{T}{T_0}}{NumberOfOptimizingCodeLines} {\cdot 1000$$
+$$balance = \frac{\frac{T}{T_0}}{NumberOfOptimizingCodeLines} \cdot 1000$$
 
 where $T_0$ is the program execution time without optimizations, $T$ is the program execution time with optimizations, $NumberOfOptimizingCodeLines$ is the number of lines of code written using intrinsic/assembler during optimization. 
 
@@ -434,8 +434,8 @@ When applying each of the optimizations we will build a table
 
 | | Absolute acceleration | Relative acceleration|
 |:---: |:---: |:---: |
-| Naive realization | 1 | 1 | 1 |
-| Optimization 1 | | $K_1$ | $K_1$ |
+| Naive implementation | 1 | 1 |
+| Optimization 1 | $K_1$ | $K_1$ |
 | Optimization 2 | $K_2$ | $K_3$ |
 
 Absolute acceleration - how many times faster the program became relative to the naive implementation after applying optimizations. 
@@ -446,11 +446,11 @@ Relative acceleration - how many times faster the program has become relative to
 
 To begin with, let's measure the running time of a naive implementation of the program without any optimizations:
 
-| | Startup 1 | Startup 2 | Startup 3 | Mean |
+| | Run1 | Run2 | Run3 | Mean |
 |:---: |:---: |:---: |:---: |:---: |
-| Naive realization | 50843355582 | 50002732758 | 51492446142 | $(508 \pm 8) \cdot 10^8$ |
+| Naive implementation | 50843355582 | 50002732758 | 51492446142 | $(508 \pm 8) \cdot 10^8$ |
 
-The characteristic time of one startup is about 20 seconds. 
+The characteristic time of one run is about 20 seconds. 
 
 ## Search for bottlenecks
 
@@ -505,7 +505,7 @@ It is assumed here that at least 32 bytes of memory are allocated to the input l
 
 Measurements:
 
-| | Startup 1 | Startup 2 | Startup 3 | Mean |
+| | Run1 | Run2 | Run3 | Mean |
 |:---: |:---: |:---: |:---: |:---: |
 |Intrinsic CRC32 | 28663836850 | 27360564576 | 28704863644 | $(282 \pm 8) \cdot 10^8$ |
                         
@@ -515,7 +515,7 @@ Performance gains:
 
 | | Absolute acceleration | Relative acceleration|
 |:---: |:---: |:---: |
-| Naive realization | 1 | 1 | 1 |
+| Naive implementation | 1 | 1 |
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ |
 
 ## Strcmp in embedded assembler
@@ -590,7 +590,7 @@ Before measuring, let me draw your attention to a bug I encountered while writin
 
 So, let's get to the measurements:
 
-| | Startup 1 | Startup 2 | Startup 3 | Mean |
+| | Run1 | Run2 | Run3 | Mean |
 |:---: |:---: |:---: |:---: |:---: |
 |strcmp unaligned | 21314818430 | 20246098392 | 19284039290 | $(203 \pm 10) \cdot 10^8$ |
                         
@@ -624,7 +624,7 @@ When allocating memory, we use `aligned_alloc`, which aligns on a 32 byte bounda
 
 Measurements:
 
-| | Startup 1 | Startup 2 | Startup 3 | Mean |
+| | Run1 | Run2 | Run3 | Mean |
 |:---: |:---: |:---: |:---: |:---: |
 |strcmp aligned only keys | 20497446244 | 21949195036 | 20672952570 | $(210 \pm 8) \cdot 10^8$ |
 
@@ -632,7 +632,7 @@ Now let's also equalize the keys that we feed to the input of the lookup functio
 
 Measurements:
 
-| | Startup 1 | Startup 2 | Startup 3 | Mean |
+| | Run1 | Run2 | Run3 | Mean |
 |:---: |:---: |:---: |:---: |:---: |
 |strcmp aligned only all | 21011997628 | 22021311548 | 20672952570 | $(219 \pm 9) \cdot 10^8$ |
 
@@ -642,9 +642,9 @@ Performance gains:
 
 | | Absolute acceleration | Relative acceleration|
 |:---: |:---: |:---: |
-| Naive realization | 1 | 1 | 1 |
+| Naive implementation | 1 | 1 |
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ |
-|Strcmp inlined asm | $2.50 |pm 0.16 | $1.39 |pm 0.11 |
+|Strcmp inlined asm | $2.50 \pm 0.16 | $1.39 \pm 0.11 |
 
 The gain is still satisfactory, we leave the optimization in place.
 
@@ -813,7 +813,7 @@ This code is written in [separate file](/Src/HashTable/HashTableList/HashTableLi
 
 Measurements:
 
-| | Startup 1 | Startup 2 | Startup 3 | Mean |
+| | Run1 | Run2 | Run3 | Mean |
 |:---: |:---: |:---: |:---: |:---: |
 |list find elem asm | 18265832736 | 18743839108 | 17652099914 | $(182 \pm 6) \cdot 10^8$ |
 
@@ -821,9 +821,9 @@ The characteristic running time of the program is about 10 seconds.
 
 | | Absolute acceleration | Relative acceleration|
 |:---: |:---: |:---: |
-| Naive realization | 1 | 1 | 1 |
+| Naive implementation | 1 | 1 | 1 |
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ |
-|Strcmp inlined asm | $2.50 |pm 0.16 | $1.39 |pm 0.11 |
+|Strcmp inlined asm | $2.50 \pm 0.16 | $1.39 \pm 0.11 |
 |list find elem asm | $2.79 \pm 0.14 | $1.12 \pm 0.09 |
 
 The last optimization is still significant - as much as 12%, so it makes sense to try to optimize further. Initially, I thought that this was not a very high increase, but as I was told it was not, so I will do more profiling steps in the future, as long as the optimizations make sense. Generally speaking, having looked at the profiling results already now, it can be seen that the only function left "in the top" is the one responsible for hash table lookup, while the rest are related to input/output. Therefore, we can assume that there is no more than one optimization left to speed up hash table search.
@@ -834,7 +834,7 @@ Despite the fact that the table size for this task was fixed so that the load-fa
 
 Measurements:
 
-| | Startup 1 | Startup 2 | Startup 3 | Mean |
+| | Run1 | Run2 | Run3 | Mean |
 |:---: |:---: |:---: |:---: |:---: |
 |load-factor 0.7 | 12736916412 | 12519980688 | 13195608752 | $(128 \pm 3) \cdot 10^8$ |
 
@@ -848,7 +848,7 @@ Summary table of results:
 
 | Absolute acceleration | Relative acceleration | Time in processor cycles |
 |:---: |:---: |:---: |:---: | 
-| Naive realization | 1 | 1 | 1 | $(508 \pm 8) \cdot 10^8$ | 
+| Naive implementation | 1 | 1 | $(508 \pm 8) \cdot 10^8$ | 
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ | $(282 \pm 8) \cdot 10^8$ |
 |Strcmp inlined asm | $2.50 \pm 0.16$ | $1.39 \pm 0.11$ | $(203 \pm 10) \cdot 10^8$ |
 |list find elem asm | $2.79 \pm 0.14$ | $1.12 \pm 0.09$ | $(182 \pm 6) \cdot 10^8$ |
@@ -866,7 +866,7 @@ Let's count the number of lines of code written for the optimization. Each cell 
 
 | |NumberOfOptimizingCodeLines |
 |:---: |:---: |
-| Naive realization | 0 |
+| Naive implementation | 0 |
 |Intrinsic CRC32 | 4 |
 |Strcmp inlined asm | 10 |
 |List find elem asm | 30 |
