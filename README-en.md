@@ -43,7 +43,7 @@ Often the data at the output of a hash function may have a specific pattern, i.e
 
 $$k \equiv r \cdot k \pmod{hashTableSize}$$, where $r - 1$ is obtained equal to the number of different remainders by division that can be obtained. Let's solve this equation - it can be rewritten as:
 
-$$k + hashTableSize \cdot \alpha = r \cdot k$$, where $\alpha$ is some integer. The smallest $k$ when this is satisfied is $r \cdot k = LCM(k, hashTableSize)$, that is, $r \cdot k = \frac{k \cdot hashTableSize}{GCD(k, hashTableSize)}$$ or $$r = \frac{hashTableSize}{GCD(k, hashTableSize)}$$. 
+$$k + hashTableSize \cdot \alpha = r \cdot k$$, where $\alpha$ is some integer. The smallest $k$ when this is satisfied is $r \cdot k = LCM(k, hashTableSize)$, that is, $r \cdot k = \frac{k \cdot hashTableSize}{GCD(k, hashTableSize)}$ or $r = \frac{hashTableSize}{GCD(k, hashTableSize)}$. 
 
 It turns out that by taking hashTableSize as a prime number we are more likely to get $GCD(k, hashTableSize) = 1$, i.e. we can fill all the cells of the hash table. 
 
@@ -222,7 +222,7 @@ static inline uint32_t Rol(uint32_t dWord)
 }
 ```
 
-This hash function recalculates hash using the formula $hash(n) = ROL(hash(n - 1)) \oplus str[n]$, running over all letters in the string, where str is the string, str[n] is the $n$th letter of the string, ROL is the bitwise rotate left operation. Initially hash(0) = 0, numbering from one. $\oplus$ - XOR operation. 
+This hash function recalculates hash using the formula $hash(n) = ROL(hash(n - 1)) \oplus str[n]$, running over all letters in the string, where str is the string, str[n] is the $n$-th letter of the string, ROL is the bitwise rotate left operation. Initially hash(0) = 0, numbering from one. $\oplus$ - XOR operation. 
 
 Besides hashing, I'm interested in the following point - there is a `rol` instruction in assembler, will the compiler be able to see it and replace my `Rol` function call with a simple instruction. Let's check it in godbolt. 
 
