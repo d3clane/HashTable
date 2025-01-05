@@ -39,7 +39,7 @@ The top [370000 English words](https://github.com/dwyl/english-words?tab=readme-
 
 Often the data at the output of a hash function may have a specific pattern, i.e., it may be in some step or the number of elements multiple of some $k$ is greater than others. Suppose our hash function has received some data as input and the output is ${k, 2k, 3k, 4k, ...}$ - all data are multiples of $k$. To get the data into the cells of the hash table the results are taken modulo $hashTableSize$ - that is, modulo the number of cells in the hash table. Then let's see how many different cells the hash table can fill in this case, how many cells it can theoretically put this data into. The data will start to fall into the same cells when 
 
-$$k \equiv r \cdot k \pmod{hashTableSize}$$$, where $r - 1$ is obtained equal to the number of different remainders by division that can be obtained. Let's solve this equation - it can be rewritten as:
+$$k \equiv r \cdot k \pmod{hashTableSize}$$, where $r - 1$ is obtained equal to the number of different remainders by division that can be obtained. Let's solve this equation - it can be rewritten as:
 
 $$k + hashTableSize \cdot \alpha = r \cdot k$$, where $\alpha$ is some integer. The smallest $k$ when this is satisfied is $r \cdot k = LCM(k, hashTableSize)$, that is, $r \cdot k = \frac{k \cdot hashTableSize}{GCD(k, hashTableSize)}$$ or $$r = \frac{hashTableSize}{GCD(k, hashTableSize)}$$. 
 
@@ -395,7 +395,7 @@ It is also a well-distributing hash function.
 Summary table of standard deviations for different hash functions:
 
 |                       |Standard deviation     |
-|:---:                  |:---:                  |
+|---                  |---                  |
 |Constant hash          | 1669.3                |
 |String length hash     | 525.9                 |
 |First char ASCII hash  | 403.4                 |
@@ -433,7 +433,7 @@ where $T_0$ is the program execution time without optimizations, $T$ is the prog
 When applying each of the optimizations we will build a table 
 
 | | Absolute acceleration | Relative acceleration|
-|:---: |:---: |:---: |
+|--- |--- |--- |
 | Naive implementation | 1 | 1 |
 | Optimization 1 | $K_1$ | $K_1$ |
 | Optimization 2 | $K_2$ | $K_3$ |
@@ -447,7 +447,7 @@ Relative acceleration - how many times faster the program has become relative to
 To begin with, let's measure the running time of a naive implementation of the program without any optimizations:
 
 | | Run1 | Run2 | Run3 | Mean |
-|:---: |:---: |:---: |:---: |:---: |
+|--- |--- |--- |--- |--- |
 | Naive implementation | 50843355582 | 50002732758 | 51492446142 | $(508 \pm 8) \cdot 10^8$ |
 
 The characteristic time of one run is about 20 seconds. 
@@ -467,7 +467,7 @@ Now let's look directly at the time spent on calling various functions. The resu
 The functions are sorted by value in the second column. This column is responsible for the time spent directly on the code of the function itself, not including the time spent on functions called from under it. The execution time of the different parts is given as a percentage of the total execution time. Let's consider the first two lines:
 
 | | Percentage of total working time |
-|:---: |:---: |
+|--- |--- |
 | CRC32 | 55.01 |
 | __strcmp_sse2_unaligned | 11.37 |
 
@@ -506,7 +506,7 @@ It is assumed here that at least 32 bytes of memory are allocated to the input l
 Measurements:
 
 | | Run1 | Run2 | Run3 | Mean |
-|:---: |:---: |:---: |:---: |:---: |
+|--- |--- |--- |--- |--- |
 |Intrinsic CRC32 | 28663836850 | 27360564576 | 28704863644 | $(282 \pm 8) \cdot 10^8$ |
                         
 The characteristic running time of the program is about 13 seconds.
@@ -514,7 +514,7 @@ The characteristic running time of the program is about 13 seconds.
 Performance gains:
 
 | | Absolute acceleration | Relative acceleration|
-|:---: |:---: |:---: |
+|--- |--- |--- |
 | Naive implementation | 1 | 1 |
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ |
 
@@ -591,7 +591,7 @@ Before measuring, let me draw your attention to a bug I encountered while writin
 So, let's get to the measurements:
 
 | | Run1 | Run2 | Run3 | Mean |
-|:---: |:---: |:---: |:---: |:---: |
+|--- |--- |--- |--- |--- |
 |strcmp unaligned | 21314818430 | 20246098392 | 19284039290 | $(203 \pm 10) \cdot 10^8$ |
                         
 The characteristic operating time is about 10 seconds.
@@ -625,7 +625,7 @@ When allocating memory, we use `aligned_alloc`, which aligns on a 32 byte bounda
 Measurements:
 
 | | Run1 | Run2 | Run3 | Mean |
-|:---: |:---: |:---: |:---: |:---: |
+|--- |--- |--- |--- |--- |
 |strcmp aligned only keys | 20497446244 | 21949195036 | 20672952570 | $(210 \pm 8) \cdot 10^8$ |
 
 Now let's also equalize the keys that we feed to the input of the lookup function to find them in the table (that is, we will equalize str2 for the AsmStrcmp function). 
@@ -633,7 +633,7 @@ Now let's also equalize the keys that we feed to the input of the lookup functio
 Measurements:
 
 | | Run1 | Run2 | Run3 | Mean |
-|:---: |:---: |:---: |:---: |:---: |
+|--- |--- |--- |--- |--- |
 |strcmp aligned only all | 21011997628 | 22021311548 | 20672952570 | $(219 \pm 9) \cdot 10^8$ |
 
 The time has not improved, but perhaps even worsened (the values lie within the error). At the same time, the requirement of alignment strongly affects the stability of the program, because if it is not there, an error will occur. Let's refuse to use the instruction that requires alignment.
@@ -641,7 +641,7 @@ The time has not improved, but perhaps even worsened (the values lie within the 
 Performance gains:
 
 | | Absolute acceleration | Relative acceleration|
-|:---: |:---: |:---: |
+|--- |--- |--- |
 | Naive implementation | 1 | 1 |
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ |
 |Strcmp inlined asm | $2.50 \pm 0.16 | $1.39 \pm 0.11 |
@@ -814,13 +814,13 @@ This code is written in [separate file](/Src/HashTable/HashTableList/HashTableLi
 Measurements:
 
 | | Run1 | Run2 | Run3 | Mean |
-|:---: |:---: |:---: |:---: |:---: |
+|--- |--- |--- |--- |--- |
 |list find elem asm | 18265832736 | 18743839108 | 17652099914 | $(182 \pm 6) \cdot 10^8$ |
 
 The characteristic running time of the program is about 10 seconds. 
 
 | | Absolute acceleration | Relative acceleration|
-|:---: |:---: |:---: |
+|--- |--- |--- |
 | Naive implementation | 1 | 1 | 1 |
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ |
 |Strcmp inlined asm | $2.50 \pm 0.16 | $1.39 \pm 0.11 |
@@ -835,7 +835,7 @@ Despite the fact that the table size for this task was fixed so that the load-fa
 Measurements:
 
 | | Run1 | Run2 | Run3 | Mean |
-|:---: |:---: |:---: |:---: |:---: |
+|--- |--- |--- |--- |--- |
 |load-factor 0.7 | 12736916412 | 12519980688 | 13195608752 | $(128 \pm 3) \cdot 10^8$ |
 
 The characteristic running time of the program is about 7 seconds. 
@@ -847,7 +847,7 @@ For the sake of purity of the experiment, it is also worth checking the speed of
 Summary table of results:
 
 | Absolute acceleration | Relative acceleration | Time in processor cycles |
-|:---: |:---: |:---: |:---: | 
+|--- |--- |--- |--- | 
 | Naive implementation | 1 | 1 | $(508 \pm 8) \cdot 10^8$ | 
 |Intrinsic CRC32 | $1.80 \pm 0.08$ | $1.80 \pm 0.08$ | $(282 \pm 8) \cdot 10^8$ |
 |Strcmp inlined asm | $2.50 \pm 0.16$ | $1.39 \pm 0.11$ | $(203 \pm 10) \cdot 10^8$ |
@@ -865,7 +865,7 @@ Let's calculate it for the cases of Strcmp inlined asm and list find elem asm. W
 Let's count the number of lines of code written for the optimization. Each cell counts the number of lines written for previous optimizations + for this optimization.
 
 | |NumberOfOptimizingCodeLines |
-|:---: |:---: |
+|--- |--- |
 | Naive implementation | 0 |
 |Intrinsic CRC32 | 4 |
 |Strcmp inlined asm | 10 |
@@ -931,7 +931,7 @@ In this case, the compiler cannot throw out ptrCalc counting, because all operat
 The program will run 5 times, as the characteristic run time of the program is very small:
 
 | | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 | Mean |
-|:---: |:---: |:---: |:---: |:---: |:---: |:---: |
+|--- |--- |--- |--- |--- |--- |--- |
 |baseline | 15683186 | 15741496 | 15766960 | 15962092 | 15638280 | $(157.6 \pm 1.2) \cdot 10^5$ |
 
 Obviously, this time is within the margin of error for each of my measurements when making optimizations, and so it can be neglected, all measurements are correct.
